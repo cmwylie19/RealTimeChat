@@ -8,11 +8,13 @@ const messageStyle = {
     },
     received:{
         backgroundColor: 'grey',
-        borderRadius: '15px'
+        borderRadius: '15px',
+        padding: '15px'
     },
     sent:{
         backgroundColor: 'lightBlue',
-        borderRadius: '15px'
+        borderRadius: '15px',
+        padding: '15px'
     }
 } 
 const Message = props => (
