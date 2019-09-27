@@ -152,11 +152,14 @@ export default function LandingContainer() {
         signUpForAccountMessage={pageState === "Login" ? signUpForAccountMessage : loginAccountMessage }
         forgotCredentials={forgotCredentials}
       >
-        { pageState === "Login" ? <FormLogin
+        { pageState === "Login" ? 
+        <FormLogin
           onLoginClick={()=>history.push("/home/dashboard")}
-        /> : <FormSignup
+        /> : 
+        <FormSignup
           onSignupClick={()=>history.push('/home/dashboard')}
-        /> }
+        /> 
+        }
       </LoginPage>
     );
   

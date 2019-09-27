@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import '@patternfly/patternfly/patternfly.css';
 import * as serviceWorker from './serviceWorker';
 import { AppContainer } from './containers/AppContainer';
