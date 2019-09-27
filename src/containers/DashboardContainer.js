@@ -144,7 +144,8 @@ export default function DashboardContainer() {
             position="right"
             onSelect={onDropdownSelect}
             isOpen={isDropdownOpen}
-            toggle={<DropdownToggle onToggle={onDropdownToggle}>Current User</DropdownToggle>}
+            toggle={<DropdownToggle onToggle={onDropdownToggle}
+            style={{color: theme.color}}>Current User</DropdownToggle>}
             dropdownItems={userDropdownItems}
           />
         </ToolbarItem>
@@ -192,8 +193,7 @@ export default function DashboardContainer() {
       >
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
-            <Text component="h1"
-            style={{color: theme.color}}>Current Message</Text>
+            <Text component="h1">Current Message</Text>
             <Text component="p">
               Online Since, for some user info
               </Text>
