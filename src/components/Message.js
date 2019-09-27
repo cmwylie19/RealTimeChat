@@ -17,11 +17,11 @@ const messageStyle = {
         padding: '15px'
     }
 } 
-const Message = props => (
+const Message = ({type, body}) => (
     <Level style={messageStyle.container}>
-        <LevelItem style={messageStyle.received}>Level Item</LevelItem>
-        <LevelItem >Level Item</LevelItem>
-        <LevelItem style={messageStyle.sent}>lalalalala Level Item</LevelItem>
+       {type === "received" ?  <LevelItem style={messageStyle.received}>{body}</LevelItem> : <LevelItem></LevelItem>}
+        <LevelItem ></LevelItem>
+        {type === "sent" ?  <LevelItem style={messageStyle.received}>{body}</LevelItem> : <LevelItem></LevelItem>}
     </Level>
 )
 export default Message;
