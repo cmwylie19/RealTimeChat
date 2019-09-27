@@ -21,7 +21,7 @@ const Message = ({type, body}) => (
     <Level style={messageStyle.container}>
        {type === "received" ?  <LevelItem style={messageStyle.received}>{body}</LevelItem> : <LevelItem></LevelItem>}
         <LevelItem ></LevelItem>
-        {type === "sent" ?  <LevelItem style={messageStyle.received}>{body}</LevelItem> : <LevelItem></LevelItem>}
+        {type === "sent" ?  <LevelItem style={messageStyle.sent}>{body}</LevelItem> : <LevelItem></LevelItem>}
     </Level>
 )
 export default Message;
