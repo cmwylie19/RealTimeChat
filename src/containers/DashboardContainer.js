@@ -30,7 +30,7 @@ import {
   ToolbarGroup,
   ToolbarItem
 } from '@patternfly/react-core';
-// make sure you've installed @patternfly/patternfly
+import { orangeTheme, blueTheme, greenTheme } from '../assets/themes'
 import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibility/accessibility';
 import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { css } from '@patternfly/react-styles';
@@ -99,11 +99,14 @@ export default function DashboardContainer() {
   ];
   const userDropdownItems = [
     <DropdownItem
+    style={{color:greenTheme.primary}}
     onClick={()=>theme.setGreenTheme()}>Green Theme</DropdownItem>,
     <DropdownItem 
+    style={{color:orangeTheme.primary}}
     onClick={()=>theme.setOrangeTheme()}
     component="button">Orange Theme</DropdownItem>,
     <DropdownItem 
+    style={{color:blueTheme.primary}}
     onClick={()=>theme.setBlueTheme()}>Blue Theme</DropdownItem>,
     <DropdownItem isDisabled component="button">
       Disabled Action
