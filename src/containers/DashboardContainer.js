@@ -205,7 +205,7 @@ export default function DashboardContainer() {
         </PageSection>
         <PageSection>
           {/* Message Section */}
-          {Array.apply(0, Array(10)).map((x, i) => (
+          {Array.apply(0, Array(30)).map((x, i) => (
            <Message 
             type={i%2===0?"sent":"received"}
             body="Hello"
