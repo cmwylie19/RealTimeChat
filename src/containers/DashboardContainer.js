@@ -155,9 +155,9 @@ export default function DashboardContainer() {
 
   const Header = (
     <PageHeader
-    style={{
-      backgroundColor: theme.backgroundColor
-    }}
+    // style={{
+    //   backgroundColor: theme.backgroundColor
+    // }}
       logo={<Brand src={imgBrand} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
       avatar={<Avatar src={imgAvatar} alt="Avatar image" />}
@@ -193,7 +193,8 @@ export default function DashboardContainer() {
       >
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
-            <Text component="h1">Current Message</Text>
+            <Text component="h1"
+            style={{color: theme.color}}>Current Convo</Text>
             <Text component="p">
               Online Since, for some user info
               </Text>
