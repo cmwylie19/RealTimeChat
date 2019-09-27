@@ -37,7 +37,7 @@ import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import imgBrand from '../assets/images/hatLogo.png';
 import imgAvatar from '../assets/images/user.png';
-import { Level, LevelItem } from '@patternfly/react-core';
+import { Message } from '../components'
 import { useHistory, useTheme } from '../reducers'
 
 export default function DashboardContainer() {
@@ -202,11 +202,7 @@ export default function DashboardContainer() {
         <PageSection>
           {/* Message Section */}
           {Array.apply(0, Array(10)).map((x, i) => (
-            <Level>
-              <LevelItem>Level Item</LevelItem>
-              <LevelItem>Level Item</LevelItem>
-              <LevelItem>Level Item</LevelItem>
-            </Level>
+           <Message />
           ))}
 
         </PageSection>
