@@ -37,7 +37,7 @@ import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import imgBrand from '../assets/images/hatLogo.png';
 import imgAvatar from '../assets/images/user.png';
-import { Message } from '../components'
+import { Message, MessageInput } from '../components'
 import { useHistory, useTheme } from '../reducers'
 
 export default function DashboardContainer() {
@@ -72,20 +72,20 @@ export default function DashboardContainer() {
     <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
       <NavList>
         <NavItem itemId={0} isActive={activeItem === 0}>
-          System Panel
+          Tiffany Jachja
           </NavItem>
         <NavItem itemId={1} isActive={activeItem === 1}>
-          Policy
+          Eric Murphy
           </NavItem>
         <NavItem itemId={2} isActive={activeItem === 2}>
-          Authentication
+          Marshall Powell
           </NavItem>
         <NavItem itemId={3} isActive={activeItem === 3}>
-          Network Services
+          Deven Phillips
           </NavItem>
-        <NavItem itemId={4} isActive={activeItem === 4}>
+        {/* <NavItem itemId={4} isActive={activeItem === 4}>
           Server
-          </NavItem>
+          </NavItem> */}
       </NavList>
     </Nav>
   );
@@ -99,15 +99,15 @@ export default function DashboardContainer() {
   ];
   const userDropdownItems = [
     <DropdownItem
-    style={{color:greenTheme.primary}}
-    onClick={()=>theme.setGreenTheme()}>Green Theme</DropdownItem>,
-    <DropdownItem 
-    style={{color:orangeTheme.primary}}
-    onClick={()=>theme.setOrangeTheme()}
-    component="button">Orange Theme</DropdownItem>,
-    <DropdownItem 
-    style={{color:blueTheme.primary}}
-    onClick={()=>theme.setBlueTheme()}>Blue Theme</DropdownItem>,
+      style={{ color: greenTheme.primary }}
+      onClick={() => theme.setGreenTheme()}>Green Theme</DropdownItem>,
+    <DropdownItem
+      style={{ color: orangeTheme.primary }}
+      onClick={() => theme.setOrangeTheme()}
+      component="button">Orange Theme</DropdownItem>,
+    <DropdownItem
+      style={{ color: blueTheme.primary }}
+      onClick={() => theme.setBlueTheme()}>Blue Theme</DropdownItem>,
     <DropdownItem isDisabled component="button">
       Disabled Action
       </DropdownItem>,
@@ -148,7 +148,7 @@ export default function DashboardContainer() {
             onSelect={onDropdownSelect}
             isOpen={isDropdownOpen}
             toggle={<DropdownToggle onToggle={onDropdownToggle}
-            >Current User</DropdownToggle>}
+            >Casey Wylie</DropdownToggle>}
             dropdownItems={userDropdownItems}
           />
         </ToolbarItem>
@@ -158,9 +158,9 @@ export default function DashboardContainer() {
 
   const Header = (
     <PageHeader
-    // style={{
-    //   backgroundColor: theme.backgroundColor
-    // }}
+      // style={{
+      //   backgroundColor: theme.backgroundColor
+      // }}
       logo={<Brand src={imgBrand} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
       avatar={<Avatar src={imgAvatar} alt="Avatar image" />}
@@ -197,22 +197,30 @@ export default function DashboardContainer() {
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
             <Text component="h1"
-            style={{color: theme.secondary}}>Current Convo</Text>
+              style={{ color: theme.secondary }}>Tiffany Jachja</Text>
             <Text component="p">
-              Online Since, for some user info
+              Online Since 3:15pm<br />
+              AppDev CoE 
               </Text>
           </TextContent>
         </PageSection>
-        <PageSection>
+        <PageSection
+        style={{
+          display:"flex",
+          flexDirection:"column",
+          justifyContent:"space-between"
+        }}>
           {/* Message Section */}
-          {Array.apply(0, Array(30)).map((x, i) => (
-           <Message 
-            type={i%2===0?"sent":"received"}
-            body="Hello"
-            primary={theme.primary}
-           />
+          {Array.apply(0, Array(8)).map((x, i) => (
+            <Message
+              type={i % 2 === 0 ? "sent" : "received"}
+              body="Hello"
+              primary={theme.primary}
+            />
           ))}
-
+          <MessageInput 
+           
+          />
         </PageSection>
       </Page>
     </Fragment>
