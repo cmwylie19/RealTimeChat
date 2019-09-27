@@ -101,10 +101,10 @@ export default function DashboardContainer() {
     <DropdownItem
     onClick={()=>theme.setGreenTheme()}>Green Theme</DropdownItem>,
     <DropdownItem 
-    onClick={()=>theme.setRedTheme()}
-    component="button">Red Theme</DropdownItem>,
+    onClick={()=>theme.setOrangeTheme()}
+    component="button">Orange Theme</DropdownItem>,
     <DropdownItem 
-    onClick={()=>theme.setDefaultTheme()}>Default Theme</DropdownItem>,
+    onClick={()=>theme.setBlueTheme()}>Blue Theme</DropdownItem>,
     <DropdownItem isDisabled component="button">
       Disabled Action
       </DropdownItem>,
@@ -145,7 +145,7 @@ export default function DashboardContainer() {
             onSelect={onDropdownSelect}
             isOpen={isDropdownOpen}
             toggle={<DropdownToggle onToggle={onDropdownToggle}
-            style={{color: theme.color}}>Current User</DropdownToggle>}
+            >Current User</DropdownToggle>}
             dropdownItems={userDropdownItems}
           />
         </ToolbarItem>
@@ -194,7 +194,7 @@ export default function DashboardContainer() {
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
             <Text component="h1"
-            style={{color: theme.color}}>Current Convo</Text>
+            style={{color: theme.secondary}}>Current Convo</Text>
             <Text component="p">
               Online Since, for some user info
               </Text>
@@ -206,6 +206,7 @@ export default function DashboardContainer() {
            <Message 
             type={i%2===0?"sent":"received"}
             body="Hello"
+            primary={theme.primary}
            />
           ))}
 
