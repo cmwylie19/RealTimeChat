@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import brandImg from '../assets/images/hatLogo.png';
 import {
   LoginFooterItem,
-  LoginForm,
   LoginMainFooterBandItem,
   LoginMainFooterLinksItem,
   LoginPage,
@@ -10,11 +9,8 @@ import {
   ListItem
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
-import bg1200 from '../assets/images/pfbg_1200.jpg'
-import bg768 from '../assets/images/pfbg_768.jpg';
-import bg768_2x from '../assets/images/pfbg_768@2x.jpg';
-import bg576 from '../assets/images/pfbg_576.jpg';
-import bg576_2x from '../assets/images/pfbg_576.jpg'
+import { BackgroundImage1200,BackgroundImage7682x,BackgroundImage5762x,BackgroundImage576, BackgroundImage768 } from '../assets/images'
+
 import {FormSignup, FormLogin} from '../components' 
 import { useHistory } from '../reducers'
 /**
@@ -22,11 +18,11 @@ import { useHistory } from '../reducers'
  */
 
 const images = {
-  [BackgroundImageSrc.lg]: bg1200,
-  [BackgroundImageSrc.sm]: bg768,
-  [BackgroundImageSrc.sm2x]: bg768_2x,
-  [BackgroundImageSrc.xs]: bg576,
-  [BackgroundImageSrc.xs2x]: bg576_2x,
+  [BackgroundImageSrc.lg]: BackgroundImage1200,
+  [BackgroundImageSrc.sm]: BackgroundImage768,
+  [BackgroundImageSrc.sm2x]: BackgroundImage7682x,
+  [BackgroundImageSrc.xs]: BackgroundImage576,
+  [BackgroundImageSrc.xs2x]: BackgroundImage5762x,
   //[BackgroundImageSrc.filter]: '/assets/images/background-filter.svg#image_overlay'
 };
 
