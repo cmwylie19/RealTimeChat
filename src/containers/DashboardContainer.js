@@ -212,7 +212,7 @@ export default function DashboardContainer() {
         }}>
           {/* Message Section */}
           <Fragment>
-          {Array.apply(0, Array(3)).map((x, i) => (
+          {Array.apply(0, Array(1)).map((x, i) => (
             <Message
               type={i % 2 === 0 ? "sent" : "received"}
               body="Hello"
