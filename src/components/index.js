@@ -5,7 +5,7 @@ import Message from './Message'
 import MessageInput from './MessageInput'
 import SocialMediaLoginContent from './SocialMediaLoginContent'
 import HelpLinks from './HelpLinks'
-import ForgotCreds from 'ForgotCreds'
+import ForgotCreds from './ForgotCreds'
 
 export {
     ForgotCreds,

@@ -211,16 +211,21 @@ export default function DashboardContainer() {
           justifyContent:"space-between"
         }}>
           {/* Message Section */}
-          {Array.apply(0, Array(8)).map((x, i) => (
+          <Fragment>
+          {Array.apply(0, Array(3)).map((x, i) => (
             <Message
               type={i % 2 === 0 ? "sent" : "received"}
               body="Hello"
               primary={theme.primary}
             />
           ))}
-          <MessageInput 
-           
+          </Fragment>
+          <Fragment>
+          <MessageInput
+           style={{display:'flex'}}
           />
+          </Fragment>
+         
         </PageSection>
       </Page>
     </Fragment>
