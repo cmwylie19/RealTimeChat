@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react'
 
-var initalState = {
+var initialState = {
     first: "",
     last: "",
     email: "",
@@ -44,3 +44,4 @@ export const UserProvider = ({ children }) => {
 }
 
 export const UserConsumer = UserContext.Consumer;
+export const useUser = () => useContext(UserContext);
