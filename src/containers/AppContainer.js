@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 // import { RouterProvider, UserReducer } from '../reducers'
-import { RouterProvider, ThemeProvider } from '../reducers'
+import { RouterProvider, ThemeProvider, UserProvider } from '../reducers'
 import { Route } from 'react-router-dom'
 
 import LandingContainer from './LandingContainer'
@@ -10,10 +10,10 @@ import DashboardContainer from './DashboardContainer'
 export const AppContainer = () => (
         <RouterProvider>
             <ThemeProvider>
-            {/* <UserReducer> */}
+            <UserProvider>
                 <Route component={LandingContainer} path="/"  exact />
                 <Route component={DashboardContainer} path="/home/dashboard" />
-            {/* </UserReducer> */}
+            </UserProvider>
             </ThemeProvider>
         </RouterProvider>
 )
