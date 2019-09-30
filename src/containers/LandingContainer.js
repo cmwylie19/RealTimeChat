@@ -6,7 +6,7 @@ import {
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { BackgroundImages as images } from '../assets/images/BackgroundImages'
-import {FormSignup,ForgotCreds, HelpLinks, FormLogin, SocialMediaLoginContent} from '../components' 
+import {SignUpForAccountMessage, LoginAccountMessage, FormSignup,ForgotCreds, HelpLinks, FormLogin, SocialMediaLoginContent} from '../components' 
 import { useHistory } from '../reducers'
 
 
@@ -56,12 +56,7 @@ export default function LandingContainer() {
       </LoginMainFooterBandItem>
     );
 
-    const loginAccountMessage = (
-      <LoginMainFooterBandItem>
-        Already have an account? 
-        <a onClick={(e)=>setPageState("Login")}>log in.</a>
-      </LoginMainFooterBandItem>
-    );
+    
 
     
     return (
@@ -77,7 +72,7 @@ export default function LandingContainer() {
         loginTitle={ pageState === "Login" ? "Log in to your account" : "Sign up for an account" }
         loginSubtitle="Please use your single sign-on LDAP credentials"
         socialMediaLoginContent={SocialMediaLoginContent}
-        signUpForAccountMessage={pageState === "Login" ? signUpForAccountMessage : loginAccountMessage }
+        signUpForAccountMessage={pageState === "Login" ? <SignUpForAccountMessage handleClick={()=>setPageState("Signup")} /> : <LoginAccountMessage handleClick={e=>setPageState("Login")} /> }
         forgotCredentials={ForgotCreds}
       >
         { pageState === "Login" ? 
