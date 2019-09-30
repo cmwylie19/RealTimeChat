@@ -9,8 +9,10 @@ import {
   Checkbox,
   ActionGroup,
   Button,
-  Radio
+  Radio,
+  Avatar
 } from '@patternfly/react-core';
+import { Upload } from './'
 
 export default function FormSignup(props) {
     const [email, setEmail] = useState("")
@@ -25,6 +27,20 @@ export default function FormSignup(props) {
 
   return (
     <Form>
+      <FormGroup
+      label="avatar"
+      isRequired
+      fieldId="avatar"
+      helperText="Please provide avatar">
+      <div>
+          <Avatar style={{ padding: '0', margin: '0', height: '50px', width: '50px' }} src={props.avatar} alt="avatar"></Avatar>
+
+          <Upload
+            avatar={props.avatar}
+            setAvatar={props.setAvatar}
+          />
+        </div>
+      </FormGroup>
        <FormGroup
         label="First Name"
         isRequired
