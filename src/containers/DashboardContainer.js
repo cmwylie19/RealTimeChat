@@ -35,8 +35,7 @@ import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibili
 import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
-import imgBrand from '../assets/images/hatLogo.png';
-import imgAvatar from '../assets/images/user.png';
+import { HatLogo, UserLogo } from '../assets/images'
 import { Message, MessageInput } from '../components'
 import { useHistory, useTheme } from '../reducers'
 
@@ -158,12 +157,9 @@ export default function DashboardContainer() {
 
   const Header = (
     <PageHeader
-      // style={{
-      //   backgroundColor: theme.backgroundColor
-      // }}
-      logo={<Brand src={imgBrand} alt="Patternfly Logo" />}
+      logo={<Brand src={HatLogo} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
-      avatar={<Avatar src={imgAvatar} alt="Avatar image" />}
+      avatar={<Avatar src={UserLogo} alt="Avatar image" />}
       showNavToggle
     />
   );
