@@ -67,18 +67,15 @@ export default function FormSignup(props) {
           onChange={e=>setEmail(e)}
         />
       </FormGroup>
-      <FormGroup
-        label="Email"
-        isRequired
-        fieldId="email"
-      >
+     
+      <FormGroup label="Password" isRequired fieldId="simple-form-email">
         <TextInput
           isRequired
-          type="email"
-          id="email"
-          name="simple-form-email"
-          value={email}
-          onChange={e=>setEmail(e)}
+          type="password"
+          id="simple-form-password"
+          name="simple-form-password"
+          value={password}
+          onChange={event=>setPassword(event)}
         />
       </FormGroup>
       <FormGroup label="Password" isRequired fieldId="simple-form-email">
