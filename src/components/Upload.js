@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react'
+import React, { Fragment } from 'react'
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons'
 import './upload.css'
 
 export default function Upload(props) {
     return (
-        <React.Fragment>
+        <Fragment>
             <div className="upload-btn-wrapper">
                 <Button variant="link" icon={<PlusCircleIcon />}>Upload </Button>
                 <input
@@ -17,6 +17,6 @@ export default function Upload(props) {
                         )
                     } />
             </div>
-        </React.Fragment>
+        </Fragment>
     )
 }
