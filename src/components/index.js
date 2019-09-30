@@ -6,8 +6,11 @@ import MessageInput from './MessageInput'
 import SocialMediaLoginContent from './SocialMediaLoginContent'
 import HelpLinks from './HelpLinks'
 import ForgotCreds from './ForgotCreds'
-
+import LoginAccountMessage from './LoginAccountMessage'
+import SignUpForAccountMessage from './SignUpForAccountMessage'
 export {
+    SignUpForAccountMessage,
+    LoginAccountMessage,
     ForgotCreds,
     HelpLinks,
     Message,
