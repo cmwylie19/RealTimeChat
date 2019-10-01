@@ -7,10 +7,11 @@ import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { BackgroundImages as images } from '../assets/images/BackgroundImages'
 import {SignUpForAccountMessage, LoginAccountMessage, FormSignup,ForgotCreds, HelpLinks, FormLogin, SocialMediaLoginContent} from '../components' 
-import { useHistory } from '../reducers'
+import { useHistory, useUser } from '../reducers'
 
 
 export default function LandingContainer() {
+    const user = useUser();
     const [ pageState, setPageState ] = useState("Login")
     const [showHelperText, setShowHelperText] = useState(false);
     const [usernameValue, setUsernameValue] = useState("");
@@ -77,9 +78,17 @@ export default function LandingContainer() {
       >
         { pageState === "Login" ? 
         <FormLogin
+          email={user.email}
+          remember={user.email}
           onLoginClick={()=>history.push("/home/dashboard")}
         /> : 
         <FormSignup
+        first={user.first}
+        last={user.last}
+        email={user.email}
+        remember={user.email}
+        avatar={user.avatar}
+      
           onSignupClick={()=>history.push('/home/dashboard')}
         /> 
         }
