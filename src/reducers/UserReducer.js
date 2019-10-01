@@ -45,7 +45,6 @@ export const UserProvider = ({ children }) => {
         setLast: last => dispatch({ type: "SET_LAST", payload: last}),
         setRemember: remember=> dispatch({type:"SET_REMEMBER", payload: remember}),
         setEmail: email => dispatch({ type: "SET_EMAIL", payload: email}),
-
         setToken: token=> dispatch({type:"SET_TOKEN", payload: token}),
         setAvatar: avatar => dispatch({ type: "SET_AVATAR", payload: avatar})
     }}>
