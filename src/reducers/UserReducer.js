@@ -40,11 +40,13 @@ export const UserProvider = ({ children }) => {
         first: state.first,
         last: state.last,
         email: state.email,
+        password: state.password,
         remember: state.remember,
         setFirst: first=> dispatch({type:"SET_FIRST", payload: first}),
         setLast: last => dispatch({ type: "SET_LAST", payload: last}),
         setRemember: remember=> dispatch({type:"SET_REMEMBER", payload: remember}),
         setEmail: email => dispatch({ type: "SET_EMAIL", payload: email}),
+        setPassword: password => dispatch({ type: "SET_PASSWORD", payload: password}),
         setToken: token=> dispatch({type:"SET_TOKEN", payload: token}),
         setAvatar: avatar => dispatch({ type: "SET_AVATAR", payload: avatar})
     }}>
