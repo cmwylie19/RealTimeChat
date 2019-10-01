@@ -80,6 +80,8 @@ export default function LandingContainer() {
         <FormLogin
           email={user.email}
           remember={user.email}
+          setRemember={ remember => user.setRemember(remember)}
+          setEmail={ email => user.setEmail(email)}
           onLoginClick={()=>history.push("/home/dashboard")}
         /> : 
         <FormSignup
@@ -88,7 +90,11 @@ export default function LandingContainer() {
         email={user.email}
         remember={user.email}
         avatar={user.avatar}
-      
+        setAvatar={avatar=> user.setAvatar(avatar)}
+        setRemember={ remember => user.setRemember(remember)}
+        setEmail={ email => user.setEmail(email)}
+        setFirst={ first => user.setFirst(first)}
+        setLast={ last => user.setLast(last)}
           onSignupClick={()=>history.push('/home/dashboard')}
         /> 
         }
