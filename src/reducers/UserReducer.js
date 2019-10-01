@@ -35,7 +35,19 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, initialState);
     return <UserContext.Provider value={{
-        user: state
+        user: state,
+        avatar: state.avatar,
+        first: state.first,
+        last: state.last,
+        email: state.email,
+        remember: state.remember,
+        setFirst: first=> dispatch({type:"SET_FIRST", payload: first}),
+        setLast: last => dispatch({ type: "SET_LAST", payload: last}),
+        setRemember: remember=> dispatch({type:"SET_REMEMBER", payload: remember}),
+        setEmail: email => dispatch({ type: "SET_EMAIL", payload: email}),
+
+        setToken: token=> dispatch({type:"SET_TOKEN", payload: token}),
+        setAvatar: avatar => dispatch({ type: "SET_AVATAR", payload: avatar})
     }}>
         {children}
     </UserContext.Provider>
