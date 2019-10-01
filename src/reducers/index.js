@@ -1,6 +1,6 @@
 import { useHistory, RouterProvider, useRouter } from './RouterReducer'
 import { useTheme, ThemeConsumer, ThemeProvider } from './ThemeReducer'
-import { UserProvider, UserConsumer } from './UserReducer'
+import { UserProvider, UserConsumer, useUser } from './UserReducer'
 export {
     useHistory,
     RouterProvider,
@@ -9,5 +9,6 @@ export {
     ThemeConsumer,
     ThemeProvider,
     UserProvider,
-    UserConsumer
+    UserConsumer,
+    useUser
 }

@@ -33,10 +33,11 @@ import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import { HatLogo, UserLogo } from '../assets/images'
 import { Message, MessageInput } from '../components'
-import { useHistory, useTheme } from '../reducers'
+import { useHistory, useTheme, useUser } from '../reducers'
 
 export default function DashboardContainer() {
   const theme = useTheme();
+  const user = useUser();
   const [currentChat, setCurrentChat] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
