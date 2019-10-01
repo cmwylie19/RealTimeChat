@@ -1,11 +1,12 @@
 import React, { useReducer, createContext, useContext } from 'react'
-
+import { UserLogo } from '../assets/images' 
 var initialState = {
     first: "",
     last: "",
     email: "",
     token: "",
     remember: false,
+    avatar: UserLogo,
     contacts: [],
     messages: [],
 
@@ -34,10 +35,7 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, initialState);
     return <UserContext.Provider value={{
-        theme: initialState,
-        changeTheme: theme => {
-            initialState = { ...theme }
-        }
+        user: state
     }}>
         {children}
     </UserContext.Provider>

@@ -8,12 +8,12 @@ import DashboardContainer from './DashboardContainer'
 
 
 export const AppContainer = () => (
-        <RouterProvider>
-            <ThemeProvider>
+    <RouterProvider>
+        <ThemeProvider>
             <UserProvider>
-                <Route component={LandingContainer} path="/"  exact />
+                <Route component={LandingContainer} path="/" exact />
                 <Route component={DashboardContainer} path="/home/dashboard" />
             </UserProvider>
-            </ThemeProvider>
-        </RouterProvider>
+        </ThemeProvider>
+    </RouterProvider>
 )
