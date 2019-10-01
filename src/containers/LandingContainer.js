@@ -80,7 +80,9 @@ export default function LandingContainer() {
         <FormLogin
           email={user.email}
           remember={user.email}
-          setRemember={ remember => user.setRemember(remember)}
+          password={user.password}
+          setPassword={ password => user.setPassword(password)}
+          setRemember={ () => user.setRemember()}
           setEmail={ email => user.setEmail(email)}
           onLoginClick={()=>history.push("/home/dashboard")}
         /> : 
