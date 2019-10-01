@@ -144,7 +144,7 @@ export default function DashboardContainer() {
             onSelect={onDropdownSelect}
             isOpen={isDropdownOpen}
             toggle={<DropdownToggle onToggle={onDropdownToggle}
-            >Casey Wylie</DropdownToggle>}
+            >{user.first} {user.last}</DropdownToggle>}
             dropdownItems={userDropdownItems}
           />
         </ToolbarItem>
@@ -156,7 +156,7 @@ export default function DashboardContainer() {
     <PageHeader
       logo={<Brand src={HatLogo} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
-      avatar={<Avatar src={UserLogo} alt="Avatar image" />}
+      avatar={<Avatar src={user.avatar} alt="Avatar image" />}
       showNavToggle
     />
   );
