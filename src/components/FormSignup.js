@@ -15,14 +15,27 @@ import {
 import { Upload } from './'
 
 export default function FormSignup(props) {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("");
-    const [first, setFirst] =useState("")
-    const [last, setLast] = useState("")
+
+    const [remember, setRemember] = useState(false)
+    const [pw1, setPW1] = useState('')
+  const [pw2, setPW2] = useState('')
+
+  const [pwSame, setPWsame] = useState(pw1 === pw2)
+
+  const NO_MATCH = <label style={{ color: 'red' }}>Passwords dont match</label>
+  const MATCH = <label style={{ color: 'green' }}>Passwords match!</label>
 
   const handleCancelClick = value1 => {
-    setEmail("");
-    setPassword("");
+    props.setEmail("");
+    props.setPassword("");
+  };
+
+  const handleChange = (checked, event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    setRemember(value)
+    props.setRemember(value)
   };
 
   return (
@@ -51,8 +64,8 @@ export default function FormSignup(props) {
           type="text"
           id="first"
           name="first"
-          value={first}
-          onChange={e=>setFirst(e)}
+          value={props.first}
+          onChange={props.setFirst}
         />
       </FormGroup>
       <FormGroup
@@ -65,8 +78,8 @@ export default function FormSignup(props) {
           type="text"
           id="last"
           name="last"
-          value={last}
-          onChange={e=>setLast(e)}
+          value={props.last}
+          onChange={props.setLast}
         />
       </FormGroup>
       <FormGroup
@@ -79,33 +92,44 @@ export default function FormSignup(props) {
           type="email"
           id="email"
           name="simple-form-email"
-          value={email}
-          onChange={e=>setEmail(e)}
+          value={props.email}
+          onChange={props.setEmail}
         />
       </FormGroup>
      
-      <FormGroup label="Password" isRequired fieldId="simple-form-email">
+      <FormGroup label="Password" isRequired fieldId="simple-form-email"
+      helperText="Please provide a password.">
         <TextInput
           isRequired
           type="password"
           id="simple-form-password"
           name="simple-form-password"
-          value={password}
-          onChange={event=>setPassword(event)}
+          value={pw1}
+          onChange={e => setPW1(e)}
         />
       </FormGroup>
-      <FormGroup label="Password" isRequired fieldId="simple-form-email">
+      <FormGroup label="Password" isRequired fieldId="simple-form-email"
+      helperText="Please confirm password.">
         <TextInput
           isRequired
           type="password"
           id="simple-form-password"
           name="simple-form-password"
-          value={password}
-          onChange={event=>setPassword(event)}
+          value={pw2}
+          onChange={e => setPW2(e)}
         />
+        {pw1 !== '' && (pw1 === pw2 ? MATCH : NO_MATCH)}
+
       </FormGroup>
       <FormGroup fieldId="checkbox1">
-        <Checkbox label="Remember me" id="checkbox1" name="checkbox1" aria-label="Update via email" />
+      <Checkbox
+          label="Remember me"
+          isChecked={remember}
+          onChange={handleChange}
+          aria-label="remember me"
+          id="check-4"
+          name="check4"
+        />
       </FormGroup>
       <ActionGroup>
         <Button

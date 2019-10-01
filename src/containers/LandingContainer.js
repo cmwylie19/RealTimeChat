@@ -82,7 +82,7 @@ export default function LandingContainer() {
           remember={user.email}
           password={user.password}
           setPassword={ password => user.setPassword(password)}
-          setRemember={ () => user.setRemember()}
+          setRemember={ (remember) => user.setRemember(remember)}
           setEmail={ email => user.setEmail(email)}
           onLoginClick={()=>history.push("/home/dashboard")}
         /> : 
