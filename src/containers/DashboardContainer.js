@@ -37,25 +37,37 @@ import Keycloak from 'keycloak-js';
 
 export default function DashboardContainer() {
   const theme = useTheme();
-  const user = useUser();
+  const {name, avatar, email, userLogin, userLogout} = useUser();
   const [currentChat, setCurrentChat] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
   const [authenticated, setAuthenticated] = useState();
 
-  const setStorage = (name, item) => localStorage.setItem(name, item)
-  const getStorage = name => localStorage.getItem(name)
-
   useEffect(() => {
     const keycloak = Keycloak('/keycloak.json');
     keycloak.init({ onLoad: 'login-required' })
       .success(authenticated => {
-
+        
+        const { given_name, family_name, preferred_username, name,email } = keycloak.idTokenParsed;
+        const { refreshToken, idToken, token} = keycloak;
+        const { realm_access, resource_access} = keycloak.tokenParsed;
+        let realmAccessRoles = realm_access.roles;
+        let accountRoles = resource_access.account.roles
+       
+        userLogin(
+          given_name,
+          family_name,
+          preferred_username,
+          name,
+          refreshToken,
+          idToken,
+          token,
+          accountRoles,
+          realmAccessRoles,
+          email
+        )
         setStorage('keycloak', JSON.stringify(keycloak))
-        setAuthenticated(authenticated)
-
-        console.log('keycloak ' + JSON.stringify(keycloak, undefined, 2))
 
         keycloak.updateToken(70).success(refreshed => {
           if (refreshed) {
@@ -173,7 +185,7 @@ export default function DashboardContainer() {
             onSelect={onDropdownSelect}
             isOpen={isDropdownOpen}
             toggle={<DropdownToggle onToggle={onDropdownToggle}
-            >{user.first} {user.last}</DropdownToggle>}
+            >{name}</DropdownToggle>}
             dropdownItems={userDropdownItems}
           />
         </ToolbarItem>
@@ -185,7 +197,7 @@ export default function DashboardContainer() {
     <PageHeader
       logo={<Brand src={HatLogo} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
-      avatar={<Avatar src={user.avatar} alt="Avatar image" />}
+      avatar={<Avatar src={avatar} alt="Avatar image" />}
       showNavToggle
     />
   );
