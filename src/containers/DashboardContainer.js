@@ -48,11 +48,26 @@ export default function DashboardContainer() {
     const keycloak = Keycloak('/keycloak.json');
     keycloak.init({ onLoad: 'login-required' })
       .success(authenticated => {
-
+        
+        const { given_name, family_name, preferred_username, name,email } = keycloak.idTokenParsed;
+        const { refreshToken, idToken, token} = keycloak;
+        const { realm_access, resource_access} = keycloak.tokenParsed;
+        let realmAccessRoles = realm_access.roles;
+        let accountRoles = resource_access.account.roles
+       
+        userLogin(
+          given_name,
+          family_name,
+          preferred_username,
+          name,
+          refreshToken,
+          idToken,
+          token,
+          accountRoles,
+          realmAccessRoles,
+          email
+        )
         setStorage('keycloak', JSON.stringify(keycloak))
-        setAuthenticated(authenticated)
-
-        console.log('keycloak ' + JSON.stringify(keycloak, undefined, 2))
 
         keycloak.updateToken(70).success(refreshed => {
           if (refreshed) {
