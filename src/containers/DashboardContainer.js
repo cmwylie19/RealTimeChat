@@ -1,9 +1,7 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
   Avatar,
   Brand,
-  Breadcrumb,
-  BreadcrumbItem,
   Button,
   ButtonVariant,
   Dropdown,
@@ -32,8 +30,10 @@ import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacin
 import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import { HatLogo, UserLogo } from '../assets/images'
-import { Message, MessageInput } from '../components'
+import { Message, MessageInput, PageBreadcrumb } from '../components'
 import { useHistory, useTheme, useUser } from '../reducers'
+import { setStorage, getStorage } from '../libs'
+import Keycloak from 'keycloak-js';
 
 export default function DashboardContainer() {
   const theme = useTheme();
@@ -42,6 +42,35 @@ export default function DashboardContainer() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
+  const [authenticated, setAuthenticated] = useState();
+
+  const setStorage = (name, item) => localStorage.setItem(name, item)
+  const getStorage = name => localStorage.getItem(name)
+
+  useEffect(() => {
+    const keycloak = Keycloak('/keycloak.json');
+    keycloak.init({ onLoad: 'login-required' })
+      .success(authenticated => {
+
+        setStorage('keycloak', JSON.stringify(keycloak))
+        setAuthenticated(authenticated)
+
+        console.log('keycloak ' + JSON.stringify(keycloak, undefined, 2))
+
+        keycloak.updateToken(70).success(refreshed => {
+          if (refreshed) {
+            console.debug('Token refreshed' + refreshed);
+            setStorage("REFRESH-TOKEN", JSON.stringify(refreshed))
+          } else {
+            console.warn('Token not refreshed, valid for '
+              + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
+          }
+        }).error(() => {
+          console.error('Failed to refresh token');
+        });
+      })
+  }, {})
+
 
   const onDropdownToggle = open => {
     setIsDropdownOpen(open)
@@ -164,20 +193,11 @@ export default function DashboardContainer() {
   const pageId = 'main-content-page-layout-default-nav';
   const PageSkipToContent = <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>;
 
-  const PageBreadcrumb = (
-    <Breadcrumb>
-      <BreadcrumbItem>Section Home</BreadcrumbItem>
-      <BreadcrumbItem to="#">Section Title</BreadcrumbItem>
-      <BreadcrumbItem to="#">Section Title</BreadcrumbItem>
-      <BreadcrumbItem to="#" isActive>
-        Section Landing
-        </BreadcrumbItem>
-    </Breadcrumb>
-  );
 
   const history = useHistory();
   return (
     <Fragment>
+
       <Page
         style={{ height: "100vh" }}
         header={Header}
@@ -193,32 +213,32 @@ export default function DashboardContainer() {
               style={{ color: theme.secondary }}>Tiffany Jachja</Text>
             <Text component="p">
               Online Since 3:15pm<br />
-              AppDev CoE 
+              AppDev CoE
               </Text>
           </TextContent>
         </PageSection>
         <PageSection
-        style={{
-          display:"flex",
-          flexDirection:"column",
-          justifyContent:"space-between"
-        }}>
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between"
+          }}>
           {/* Message Section */}
           <Fragment>
-          {Array.apply(0, Array(1)).map((x, i) => (
-            <Message
-              type={i % 2 === 0 ? "sent" : "received"}
-              body="Hello"
-              primary={theme.primary}
-            />
-          ))}
+            {Array.apply(0, Array(1)).map((x, i) => (
+              <Message
+                type={i % 2 === 0 ? "sent" : "received"}
+                body="Hello"
+                primary={theme.primary}
+              />
+            ))}
           </Fragment>
           <Fragment>
-          <MessageInput
-           style={{display:'flex'}}
-          />
+            <MessageInput
+              style={{ display: 'flex' }}
+            />
           </Fragment>
-         
+
         </PageSection>
       </Page>
     </Fragment>

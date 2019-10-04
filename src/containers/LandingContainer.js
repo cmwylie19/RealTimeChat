@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LoginMainFooterBandItem,
   LoginPage
 } from '@patternfly/react-core';
+import Keycloak from 'keycloak-js';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { BackgroundImages as images } from '../assets/images/BackgroundImages'
@@ -19,8 +20,19 @@ export default function LandingContainer() {
     const [passwordValue, setPasswordValue] = useState("")
     const [ isValidPassword, setIsValidPassword] = useState("");
     const [ isRememberMeChecked, setRememberMeChecked] = useState(false)
-    
+    const [keycloak, setKeycloak] = useState();
+    const [authenticated, setAuthenticated] =useState(false);
+
     const history = useHistory();
+
+    useEffect(()=>{
+      const keycloak = Keycloak('/keycloak.json');
+      keycloak.init({onLoad: 'login-required'})
+      .success(authenticated => {
+        setKeycloak(keycloak);
+        setAuthenticated(authenticated)
+      })
+    })
 
   const handleUsernameChange = value => {
     setUsernameValue( value );
@@ -84,7 +96,7 @@ export default function LandingContainer() {
           setPassword={ password => user.setPassword(password)}
           setRemember={ (remember) => user.setRemember(remember)}
           setEmail={ email => user.setEmail(email)}
-          onLoginClick={()=>history.push("/home/dashboard")}
+          onLoginClick={()=>history.push("/dashboard")}
         /> : 
         <FormSignup
         first={user.first}
@@ -97,7 +109,7 @@ export default function LandingContainer() {
         setEmail={ email => user.setEmail(email)}
         setFirst={ first => user.setFirst(first)}
         setLast={ last => user.setLast(last)}
-          onSignupClick={()=>history.push('/home/dashboard')}
+        onSignupClick={()=>history.push('/dashboard')}
         /> 
         }
       </LoginPage>

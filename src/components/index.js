@@ -8,7 +8,9 @@ import HelpLinks from './HelpLinks'
 import ForgotCreds from './ForgotCreds'
 import LoginAccountMessage from './LoginAccountMessage'
 import SignUpForAccountMessage from './SignUpForAccountMessage'
+import PageBreadcrumb from './PageBreadcrumb'
 export {
+    PageBreadcrumb,
     SignUpForAccountMessage,
     LoginAccountMessage,
     ForgotCreds,
