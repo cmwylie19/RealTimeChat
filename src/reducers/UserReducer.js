@@ -1,5 +1,7 @@
 import React, { useReducer, createContext, useContext } from 'react'
 import { UserLogo } from '../assets/images'
+
+
 var initialState = {
     given_name: "",
     family_name: "",
@@ -14,13 +16,13 @@ var initialState = {
     remember: false,
     avatar: UserLogo,
     contacts: [],
-    messages: [],
-
+    messages: []
 }
 
 const UserReducer = (state = {}, action) => {
     switch (action.type) {
         case "USER_LOGIN":
+            console.log(`USER_LOGIN\n\n+${JSON.stringify(action.payload)}`)
             return {
                 ...state,
                 given_name: action.payload.given_name,
@@ -76,6 +78,7 @@ export const UserProvider = ({ children }) => {
         email: state.email,
         password: state.password,
         remember: state.remember,
+        name: state.name,
         userLogin: (given_name,
             family_name,
             preferred_username,
@@ -86,7 +89,7 @@ export const UserProvider = ({ children }) => {
             accountRoles,
             realmAccessRoles,
             email) => dispatch({
-                type: "USER_LOGIN", 
+                type: "USER_LOGIN",
                 payload: {
                     given_name,
                     family_name,
@@ -100,7 +103,7 @@ export const UserProvider = ({ children }) => {
                     email
                 }
             }),
-        userLogout: ()=> dispatch({type: "USER_LOGOUT"}),
+        userLogout: () => dispatch({ type: "USER_LOGOUT" }),
         setFirst: given_name => dispatch({ type: "SET_GIVEN_NAME", payload: given_name }),
         setLast: family_name => dispatch({ type: "SET_FAMILY_NAME", payload: family_name }),
         setRemember: remember => dispatch({ type: "SET_REMEMBER", payload: remember }),
