@@ -37,15 +37,12 @@ import Keycloak from 'keycloak-js';
 
 export default function DashboardContainer() {
   const theme = useTheme();
-  const user = useUser();
+  const {name, avatar, email, userLogin, userLogout} = useUser();
   const [currentChat, setCurrentChat] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
   const [authenticated, setAuthenticated] = useState();
-
-  const setStorage = (name, item) => localStorage.setItem(name, item)
-  const getStorage = name => localStorage.getItem(name)
 
   useEffect(() => {
     const keycloak = Keycloak('/keycloak.json');
@@ -173,7 +170,7 @@ export default function DashboardContainer() {
             onSelect={onDropdownSelect}
             isOpen={isDropdownOpen}
             toggle={<DropdownToggle onToggle={onDropdownToggle}
-            >{user.first} {user.last}</DropdownToggle>}
+            >{name}</DropdownToggle>}
             dropdownItems={userDropdownItems}
           />
         </ToolbarItem>
@@ -185,7 +182,7 @@ export default function DashboardContainer() {
     <PageHeader
       logo={<Brand src={HatLogo} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
-      avatar={<Avatar src={user.avatar} alt="Avatar image" />}
+      avatar={<Avatar src={avatar} alt="Avatar image" />}
       showNavToggle
     />
   );
