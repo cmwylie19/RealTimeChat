@@ -32,8 +32,9 @@ import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import { HatLogo, UserLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
 import { useHistory, useTheme, useUser } from '../reducers'
-import { setStorage, getStorage } from '../libs'
+import { setStorage, readCookies, setCookie } from '../libs'
 import Keycloak from 'keycloak-js';
+
 
 export default function DashboardContainer() {
   const theme = useTheme();
@@ -42,7 +43,6 @@ export default function DashboardContainer() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
-  const [authenticated, setAuthenticated] = useState();
 
   useEffect(() => {
     const keycloak = Keycloak('/keycloak.json');
@@ -50,7 +50,7 @@ export default function DashboardContainer() {
       .success(authenticated => {
         
         const { given_name, family_name, preferred_username, name,email } = keycloak.idTokenParsed;
-        const { refreshToken, idToken, token} = keycloak;
+        const { refreshToken,refreshTokenParsed, idToken, idTokenParsed, token, tokenParsed} = keycloak;
         const { realm_access, resource_access} = keycloak.tokenParsed;
         let realmAccessRoles = realm_access.roles;
         let accountRoles = resource_access.account.roles
@@ -67,8 +67,11 @@ export default function DashboardContainer() {
           realmAccessRoles,
           email
         )
+        setCookie("refreshToken", refreshToken, refreshTokenParsed.exp);
+        setCookie("idToken", idToken, idTokenParsed.exp);
+        setCookie("token", token, tokenParsed.exp);
         setStorage('keycloak', JSON.stringify(keycloak))
-
+        readCookies()
         keycloak.updateToken(70).success(refreshed => {
           if (refreshed) {
             console.debug('Token refreshed' + refreshed);
