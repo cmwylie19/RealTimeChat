@@ -10,7 +10,10 @@ export const getCookie = name => {
     Cookies.get(name)
 }
 
-export const clearCookies = () => Cookies.remove()
+export const clearCookies = () => 
+Object.keys(Cookies.get()).forEach(function(cookie) {
+  Cookies.remove(cookie);
+});
 
 
 export const parseCookie = str =>

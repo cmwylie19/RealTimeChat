@@ -31,8 +31,8 @@ export const deleteSession = async (name) => await instance('http://localhost:33
 
 export const fetchAll = async () => await instance('http://localhost:3332', { crossdomain: true }).get(`/all`)
 
-export const logout = async ({ userLogout, keycloak, clearCookies }) => {
-    await keycloak.logout();
-    userLogout();
+export const logout = async (  clearCookies ) => {
+    // await keycloak.logout();
+    // userLogout();
     clearCookies()
 }

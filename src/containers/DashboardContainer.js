@@ -37,6 +37,7 @@ import Keycloak from 'keycloak-js';
 
 
 let kcCopy;
+var cookie;
 export default function DashboardContainer() {
 
   const theme = useTheme();
@@ -49,7 +50,7 @@ export default function DashboardContainer() {
   const [username, setUsername] = useState();
 
   try {
-    var cookie = parseCookie(document.cookie);
+     cookie = parseCookie(document.cookie);
   }
   catch (err) {
     console.log(err)
@@ -59,7 +60,7 @@ export default function DashboardContainer() {
   useEffect(async () => {
 
     const keycloak = Keycloak('/keycloak.json');
-    if (cookie.idToken === null) {
+    if (cookie === null || cookie === undefined) {
       keycloak.init({ onLoad: 'login-required' })
         .success(async authenticated => {
 
@@ -196,24 +197,15 @@ export default function DashboardContainer() {
     <DropdownItem component="button"
       //onClick={() => history.push('/')
       onClick={async () => {
-        let request = async () => await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout')
-        request.headers = {
-
-          "Content-Type": "application/x-www-form-urlencoded",
-          'Access-Control-Allow-Origin': 'http://localhost:8080/auth',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-          'Access-Control-Allow-Headers': ' Origin, Content-Type, Authorization, Content-Length, X-Requested-With',
-          'Accept': 'application/x-www-form-urlencoded'
-        }
-        let result = await request()
-        //let result =  await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout?redirect_uri=http://localhost:8080/auth/admin',{'mode':'no-cors'})
-        userLogout(); clearCookies();
-        deleteSession(username);
-        console.log('response from logout' + result)
-        //  .then(response=>{
-
-        //   })
-        //  .catch(err=>console.log(`errors during logout `+err))
+        clearCookies();
+        //logout(clearCookies())
+        // clearCookies();
+        // deleteSession(username);
+        // userLogout(); 
+        // clearCookies();
+        // deleteSession(username);
+        // let request = async () => await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout')
+        // let result = await request()
 
       }}
     >Logout</DropdownItem>
