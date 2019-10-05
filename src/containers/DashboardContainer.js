@@ -29,17 +29,17 @@ import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibili
 import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
-import { HatLogo, UserLogo } from '../assets/images'
+import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
 import { useHistory, useTheme, useUser } from '../reducers'
-import { setStorage, readCookies, setCookie } from '../libs'
+import { setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll } from '../libs'
 import Keycloak from 'keycloak-js';
-
 
 export default function DashboardContainer() {
   const theme = useTheme();
   const {name, avatar, email, userLogin, userLogout} = useUser();
-  const [currentChat, setCurrentChat] = useState('');
+  const [OnlineUsers, setOnlineUsers] = useState([]);
+  const [CurrentChat, setCurrentChat] = useState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
@@ -47,7 +47,7 @@ export default function DashboardContainer() {
   useEffect(() => {
     const keycloak = Keycloak('/keycloak.json');
     keycloak.init({ onLoad: 'login-required' })
-      .success(authenticated => {
+      .success(async authenticated => {
         
         const { given_name, family_name, preferred_username, name,email } = keycloak.idTokenParsed;
         const { refreshToken,refreshTokenParsed, idToken, idTokenParsed, token, tokenParsed} = keycloak;
@@ -71,8 +71,19 @@ export default function DashboardContainer() {
         setCookie("idToken", idToken, idTokenParsed.exp);
         setCookie("token", token, tokenParsed.exp);
         setStorage('keycloak', JSON.stringify(keycloak))
-        readCookies()
-        keycloak.updateToken(70).success(refreshed => {
+        readCookies();
+        const addItem = (a) => {
+          console.log(`${a.length} length ${JSON.stringify(a)}`)
+         
+        };
+
+        await setSession(idTokenParsed.exp,idToken,name)
+        let onlines = await fetchAll();
+        
+        setOnlineUsers([...OnlineUsers,...onlines.data])
+        setCurrentChat(onlines.data[0])
+     
+          keycloak.updateToken(70).success(refreshed => {
           if (refreshed) {
             console.debug('Token refreshed' + refreshed);
             setStorage("REFRESH-TOKEN", JSON.stringify(refreshed))
@@ -108,13 +119,16 @@ export default function DashboardContainer() {
   }
 
 
-  const PageNav = (
-    <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
+  const PageNav =(
+     <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
       <NavList>
-        <NavItem itemId={0} isActive={activeItem === 0}>
-          Tiffany Jachja
-          </NavItem>
-        <NavItem itemId={1} isActive={activeItem === 1}>
+        {OnlineUsers.map((user,i)=>{
+          return <NavItem itemId={i} isActive={activeItem === i} onClick={()=>setCurrentChat(OnlineUsers[i])}>
+           {user}
+           </NavItem>
+        })}
+       
+        {/* <NavItem itemId={1} isActive={activeItem === 1}>
           Eric Murphy
           </NavItem>
         <NavItem itemId={2} isActive={activeItem === 2}>
@@ -122,13 +136,13 @@ export default function DashboardContainer() {
           </NavItem>
         <NavItem itemId={3} isActive={activeItem === 3}>
           Deven Phillips
-          </NavItem>
+          </NavItem> */}
         {/* <NavItem itemId={4} isActive={activeItem === 4}>
           Server
           </NavItem> */}
       </NavList>
     </Nav>
-  );
+  )
   const kebabDropdownItems = [
     <DropdownItem>
       <BellIcon /> Notifications
@@ -225,7 +239,7 @@ export default function DashboardContainer() {
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
             <Text component="h1"
-              style={{ color: theme.secondary }}>Tiffany Jachja</Text>
+              style={{ color: theme.secondary }}>{CurrentChat}</Text>
             <Text component="p">
               Online Since 3:15pm<br />
               AppDev CoE
