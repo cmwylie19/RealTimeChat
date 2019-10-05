@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useImperativeHandle,useRef,Fragment, useEffect } from 'react';
 import {
   Button,
   ButtonVariant,
@@ -7,13 +7,23 @@ import {
 } from '@patternfly/react-core';
 
 export default function MessageInput(props) {
-
+  const inputEl = useRef(null);
+  // useEffect(()=>{
+  //   inputEl.current.focus();
+  // },{})
+  useImperativeHandle(inputEl, () => ({
+    focus: () => {
+      inputEl.current.focus();
+    }
+  }));
   return (
     <Fragment
     >
       <InputGroup
       >
-        <TextArea name="textarea2" id="textarea2" aria-label="textarea with button" />
+        <TextArea 
+        ref={inputEl}
+        name="textarea2" id="textarea2" aria-label="textarea with button" />
         <Button id="textAreaButton2" variant={ButtonVariant.control}>
           Send
           </Button>

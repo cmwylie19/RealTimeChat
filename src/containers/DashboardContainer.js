@@ -35,6 +35,8 @@ import { useHistory, useTheme, useUser } from '../reducers'
 import { setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll } from '../libs'
 import Keycloak from 'keycloak-js';
 
+
+let kcCopy;
 export default function DashboardContainer() {
   const theme = useTheme();
   const {name, avatar, email, userLogin, userLogout} = useUser();
@@ -43,7 +45,7 @@ export default function DashboardContainer() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
-
+  
   useEffect(() => {
     const keycloak = Keycloak('/keycloak.json');
     keycloak.init({ onLoad: 'login-required' })
@@ -72,7 +74,7 @@ export default function DashboardContainer() {
         setCookie("token", token, tokenParsed.exp);
         setStorage('keycloak', JSON.stringify(keycloak))
         readCookies();
-       
+          kcCopy = Object.assign({},keycloak);
 
         await setSession(idTokenParsed.exp,idToken,name)
         let onlines = await fetchAll();
@@ -165,7 +167,9 @@ export default function DashboardContainer() {
     <DropdownSeparator />,
     <DropdownItem>Separated Link</DropdownItem>,
     <DropdownItem component="button"
-      onClick={() => history.push('/')}>Logout</DropdownItem>
+      //onClick={() => history.push('/')
+      onClick={()=>{kcCopy.logout()}}
+    >Logout</DropdownItem>
   ];
   const PageToolbar = (
     <Toolbar>
