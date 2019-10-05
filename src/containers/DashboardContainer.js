@@ -72,10 +72,7 @@ export default function DashboardContainer() {
         setCookie("token", token, tokenParsed.exp);
         setStorage('keycloak', JSON.stringify(keycloak))
         readCookies();
-        const addItem = (a) => {
-          console.log(`${a.length} length ${JSON.stringify(a)}`)
-         
-        };
+       
 
         await setSession(idTokenParsed.exp,idToken,name)
         let onlines = await fetchAll();
