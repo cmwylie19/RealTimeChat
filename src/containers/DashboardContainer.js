@@ -31,13 +31,14 @@ import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
-import { useHistory, useTheme, useUser } from '../reducers'
-import { logout, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
+import { useHistory, useTheme, useUser,SocketConsumer } from '../reducers'
+import { logout, getCookie,setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
 import Keycloak from 'keycloak-js';
 
 
 let kcCopy;
 export default function DashboardContainer() {
+
   const theme = useTheme();
   const {name, avatar, email, userLogin, userLogout} = useUser();
   const [OnlineUsers, setOnlineUsers] = useState([]);
@@ -45,10 +46,11 @@ export default function DashboardContainer() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
+  const [username,setUsername] =useState();
   
   useEffect(() => {
     const keycloak = Keycloak('/keycloak.json');
-    keycloak.init({ onLoad: 'login-required' })
+    !getCookie('idToken') && keycloak.init({ onLoad: 'login-required' })
       .success(async authenticated => {
         
         const { given_name, family_name, preferred_username, name,email } = keycloak.idTokenParsed;
@@ -56,7 +58,7 @@ export default function DashboardContainer() {
         const { realm_access, resource_access} = keycloak.tokenParsed;
         let realmAccessRoles = realm_access.roles;
         let accountRoles = resource_access.account.roles
-       
+        setUsername(preferred_username.split('@')[0]);
         userLogin(
           given_name,
           family_name,
@@ -76,10 +78,10 @@ export default function DashboardContainer() {
         readCookies();
           kcCopy = Object.assign({},keycloak);
 
-        await setSession(idTokenParsed.exp,idToken,name)
+        await setSession(idTokenParsed.exp,idToken,preferred_username.split('@')[0])
         let onlines = await fetchAll();
         
-        setOnlineUsers([...OnlineUsers,...onlines.data])
+        setOnlineUsers([...onlines.data])
         setCurrentChat(onlines.data[0])
      
           keycloak.updateToken(70).success(refreshed => {
@@ -122,7 +124,7 @@ export default function DashboardContainer() {
      <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
       <NavList>
         {OnlineUsers.map((user,i)=>{
-          return <NavItem itemId={i} isActive={activeItem === i} onClick={()=>setCurrentChat(OnlineUsers[i])}>
+         return <NavItem itemId={i} isActive={activeItem === i} onClick={()=>setCurrentChat(OnlineUsers[i])}>
            {user}
            </NavItem>
         })}
@@ -227,7 +229,8 @@ export default function DashboardContainer() {
   const history = useHistory();
   return (
     <Fragment>
-
+      <SocketConsumer>
+      {socket=>(
       <Page
         style={{ height: "100vh" }}
         header={Header}
@@ -265,12 +268,18 @@ export default function DashboardContainer() {
           </Fragment>
           <Fragment>
             <MessageInput
+            id={socket.id}
+            email={username}
+            CurrentChat={CurrentChat}
+            sendDM={(to,from,content)=>socket.sendDM(to,from,content)}
               style={{ display: 'flex' }}
             />
           </Fragment>
 
         </PageSection>
       </Page>
+      )}
+      </SocketConsumer>
     </Fragment>
   );
 }

@@ -7,6 +7,7 @@ import { promisify } from 'util'
 //const client = redis.createClient();
 const client = new redis()
 client.set(`concurrent`, '');
+export const delAsync = promisify(client.del).bind(client)
 export const getAsync = promisify(client.get).bind(client)
 export const setAsync = promisify(client.set).bind(client);
 export const keysAsync = promisify(client.keys).bind(client);

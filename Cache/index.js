@@ -65,47 +65,61 @@ app.post('/img/:id', (req,res)=>{
     request('http://localhost:3000/logo512.png').pipe(outfile)
 })
 
-
+let currentUsers = [];
 
 io.on('connection', (socket) => {
-    let nick = socket.handshake.query.nick;
+    console.log('new connection '+JSON.stringify(socket.handshake,undefined,2))
+    let handshake = socket.handshake;
     let currentUser = {
         id: socket.id,
-        nick: nick
+        handshake: handshake
     };
 
-    if (findIndex(users, currentUser.id) > -1) {
-        console.log('[INFO] User ID is already connected, kicking.');
-        socket.disconnect();
-    } else if (!validNick(currentUser.nick)) {
-        socket.disconnect();
-    } else {
-        console.log('[INFO] User ' + currentUser.nick + ' connected!');
-        sockets[currentUser.id] = socket;
-        users.push(currentUser);
-        io.emit('userJoin', {nick: currentUser.nick});
-        console.log('[INFO] Total users: ' + users.length);
-    }
-
-    socket.on('ding', () => {
-        socket.emit('dong');
+    socket.broadcast.to(socket.id).emit('newUserPrivate', currentUser);
+    socket.on("newUserCreds",creds=> {
+        currentUsers = [...currentUsers,creds]
     });
+
+    socket.on("messagePrivate",message=>{
+        console.log("\nGot a private message.\n"+message.content)
+        console.log("\nGfrom \n"+message.from)
+        console.log("\t to \n"+message.to)
+        let to = message.to;
+        let from = message.from;
+
+        let user = currentUsers.filter(u=>u.name===to);
+        socket.broadcast.to(user.id).emit('messagePrivate', message);
+
+    })
 
     socket.on('disconnect', () => {
-        if (findIndex(users, currentUser.id) > -1) users.splice(findIndex(users, currentUser.id), 1);
+        //currentUsers.handshake;
+    //    if (findIndex(currentUsers, currentUser) > -1) users.splice(findIndex(users, currentUser.id), 1);
         console.log('[INFO] User ' + currentUser.nick + ' disconnected!');
-        socket.broadcast.emit('userDisconnect', {nick: currentUser.nick});
+       // socket.broadcast.emit('userDisconnect', {name: currentUsers[index].name});
     });
 
-    socket.on('userChat', (data) => {
-        let _nick = sanitizeString(data.nick);
-        let _message = sanitizeString(data.message);
-        let date = new Date();
-        let time = ("0" + date.getHours()).slice(-2) + ("0" + date.getMinutes()).slice(-2);
 
-        console.log('[CHAT] [' + time + '] ' + _nick + ': ' + _message);
-        socket.broadcast.emit('serverSendUserChat', {nick: _nick, message: _message});
-    });
+
+    // socket.on('ding', () => {
+    //     socket.emit('dong');
+    // });
+
+    // socket.on('disconnect', () => {
+    //     if (findIndex(users, currentUser.id) > -1) users.splice(findIndex(users, currentUser.id), 1);
+    //     console.log('[INFO] User ' + currentUser.nick + ' disconnected!');
+    //     socket.broadcast.emit('userDisconnect', {nick: currentUser.nick});
+    // });
+
+    // socket.on('userChat', (data) => {
+    //     let _nick = sanitizeString(data.nick);
+    //     let _message = sanitizeString(data.message);
+    //     let date = new Date();
+    //     let time = ("0" + date.getHours()).slice(-2) + ("0" + date.getMinutes()).slice(-2);
+
+    //     console.log('[CHAT] [' + time + '] ' + _nick + ': ' + _message);
+    //     socket.broadcast.emit('serverSendUserChat', {nick: _nick, message: _message});
+    // });
 });
 
 server.listen(process.env.PORT,()=>{
