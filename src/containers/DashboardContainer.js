@@ -32,7 +32,7 @@ import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
 import { useHistory, useTheme, useUser } from '../reducers'
-import { setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll } from '../libs'
+import { logout, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
 import Keycloak from 'keycloak-js';
 
 
@@ -168,7 +168,7 @@ export default function DashboardContainer() {
     <DropdownItem>Separated Link</DropdownItem>,
     <DropdownItem component="button"
       //onClick={() => history.push('/')
-      onClick={()=>{kcCopy.logout()}}
+      onClick={()=>{kcCopy.logout() && userLogout() && clearCookies()}}
     >Logout</DropdownItem>
   ];
   const PageToolbar = (

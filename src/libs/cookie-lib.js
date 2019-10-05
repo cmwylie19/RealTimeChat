@@ -9,3 +9,5 @@ export const setCookie = (name, value, expires ) => {
 export const getCookie = name => {
     Cookies.get(name)
 }
+
+export const clearCookies = () => Cookies.remove()

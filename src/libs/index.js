@@ -1,7 +1,7 @@
 import { success, failure } from './response-lib'
 import { setStorage, getStorage } from './storage-lib'
-import { setSession,headerRequest, authRequest, fetchAll } from './request-lib'
-import { readCookies, getCookie, setCookie } from './cookie-lib'
+import { setSession,headerRequest, authRequest, fetchAll,logout } from './request-lib'
+import { readCookies, getCookie, setCookie, clearCookies } from './cookie-lib'
 export {
     setStorage,
     readCookies,
@@ -13,5 +13,7 @@ export {
     headerRequest, 
     authRequest,
     fetchAll,
-    setSession
+    setSession,
+    clearCookies,
+    logout
 }

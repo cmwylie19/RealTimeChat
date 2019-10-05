@@ -8,9 +8,7 @@ import {
 
 export default function MessageInput(props) {
   const inputEl = useRef(null);
-  // useEffect(()=>{
-  //   inputEl.current.focus();
-  // },{})
+  useRef(()=>{  inputEl.current.focus()})
   useImperativeHandle(inputEl, () => ({
     focus: () => {
       inputEl.current.focus();
