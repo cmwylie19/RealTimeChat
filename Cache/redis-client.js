@@ -2,12 +2,17 @@ import redis from 'ioredis'
 import bluebird from 'bluebird'
 import { promisify } from 'util'
 
-//bluebird.promisifyAll(redis);
-
+// Redis.Promise = global.Promise;
 //const client = redis.createClient();
 const client = new redis()
+
+bluebird.promisifyAll(client);
 client.set(`concurrent`, '');
-export const delAsync = promisify(client.del).bind(client)
+export const delAsync = key => {
+        return new Promise((resolve,reject)=>{
+            client.del(key, (err,data)=> err ? reject(err) : resolve(data))
+        }) 
+}
 export const getAsync = promisify(client.get).bind(client)
 export const setAsync = promisify(client.set).bind(client);
 export const keysAsync = promisify(client.keys).bind(client);

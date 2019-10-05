@@ -20,6 +20,7 @@ export const authRequest = (request, header, value) => {
 }
 export const setSession = async (exp,idToken,name)=> await instance('http://localhost:3332',{ crossdomain: true }).get(`/store/${exp}/${idToken}\?value=${name}`);
        
+export const deleteSession =async (name)=> await instance('http://localhost:3332',{ crossdomain: true }).get(`/delete/${name}`)
 export const fetchAll =async ()=> await instance('http://localhost:3332',{ crossdomain: true }).get(`/all`)
 
 export const logout = async ({userLogout,keycloak,clearCookies}) => {

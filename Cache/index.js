@@ -4,7 +4,7 @@ import http from 'http';
 import SocketIO from 'socket.io';
 import request from 'request'
 import cors from 'cors'
-import { getAsync, setAsync, fetchAll } from './redis-client'
+import { getAsync, setAsync, fetchAll, delAsync } from './redis-client'
 import { createWriteStream } from 'fs';
 
 export function validNick(nickname) {
@@ -55,6 +55,16 @@ app.get('/name/:id',async (req,res)=>{
     .send(await getAsync(`concurrent:${req.params.id}`))
 })
 
+app.get('/delete/:id',async (req,res)=>{
+    try {
+        await delAsync(`concurrent:${req.params.id}`)
+        res.send("cool")
+    }
+   catch(err){
+       res.send(err.message)
+   }
+})
+
 app.get('/all',async (req,res)=>{
     res
     .status(200)
@@ -99,27 +109,6 @@ io.on('connection', (socket) => {
        // socket.broadcast.emit('userDisconnect', {name: currentUsers[index].name});
     });
 
-
-
-    // socket.on('ding', () => {
-    //     socket.emit('dong');
-    // });
-
-    // socket.on('disconnect', () => {
-    //     if (findIndex(users, currentUser.id) > -1) users.splice(findIndex(users, currentUser.id), 1);
-    //     console.log('[INFO] User ' + currentUser.nick + ' disconnected!');
-    //     socket.broadcast.emit('userDisconnect', {nick: currentUser.nick});
-    // });
-
-    // socket.on('userChat', (data) => {
-    //     let _nick = sanitizeString(data.nick);
-    //     let _message = sanitizeString(data.message);
-    //     let date = new Date();
-    //     let time = ("0" + date.getHours()).slice(-2) + ("0" + date.getMinutes()).slice(-2);
-
-    //     console.log('[CHAT] [' + time + '] ' + _nick + ': ' + _message);
-    //     socket.broadcast.emit('serverSendUserChat', {nick: _nick, message: _message});
-    // });
 });
 
 server.listen(process.env.PORT,()=>{
