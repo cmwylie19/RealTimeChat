@@ -5,29 +5,30 @@ import {
   TextArea,
   InputGroup,
 } from '@patternfly/react-core';
-import { setCookie } from '../libs';
+import { useKeyListener } from '../libs';
 
 
 
 export default function MessageInput(props) {
   const [content, setContent] = useState("");
 
- 
+
+ const submitMessage = () => { 
+   props.sendMessage(props.CurrentChat, props.username, content);
+  setContent("");
+}
+
 
   return (
     <Fragment>
-      <InputGroup
-      >
+      <InputGroup>
         <TextArea
           value={content}
-          onChange={e => setContent(e)}
+          onKeyUp={event =>event.keyCode===13 ? submitMessage():null}
+          onChange={event => setContent(event)}
           name="textarea2" id="textarea2" aria-label="textarea with button" />
         <Button
-          onClick={() => {
-            props.sendMessage(props.CurrentChat, props.username, content);
-            setContent("");
-
-          }}
+          onClick={() =>submitMessage()}
           id="textAreaButton2" variant={ButtonVariant.control}>
           Send
           </Button>

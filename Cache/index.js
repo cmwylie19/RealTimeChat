@@ -76,7 +76,7 @@ app.post('/img/:id', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log("connected " + socket.id)
-    socket.on('connection', ()=>socket.broadcast.emit("userSignin"))
+    socket.on('connection', () => socket.broadcast.emit("userSignin"))
     io.on("newMessageClient", data => {
         console.log("newCLientMessageIO " + data)
         io.broadcast.emit("newMessageServer", data)
@@ -88,8 +88,8 @@ io.on('connection', (socket) => {
     });
 
 
-    socket.on('disconnect', ()=>socket.broadcast.emit("userSignout"))
-   // socket.on("connect", () => io.emit("userSignin"));
+    socket.on('disconnect', () => socket.broadcast.emit("userSignout"))
+    // socket.on("connect", () => io.emit("userSignin"));
 });
 
 
