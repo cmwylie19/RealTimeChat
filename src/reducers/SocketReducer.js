@@ -17,6 +17,12 @@ export const SocketProvider = (props) => {
 
     const { log } = console
     io.on('connection', (socket) => {
+        io.on('newMessageServer',data=>{
+            log('server data'+JSON.stringify(data))
+            const {to,from,content} =data;
+            setMsg([...msg,{to,from,content}])
+            log('new message '+{to,from,content})
+        })
 
         io.on("userSignin", async () => {
             let onlines = await fetchAll()
@@ -35,8 +41,9 @@ export const SocketProvider = (props) => {
             setOnline([...onlines.data])
         })
 
-        socket.on('disconnect', () => {
-            log(`websocket discnnected`);
+        io.on('disconnect', async() => {
+            let onlines = await fetchAll()
+            setOnline([...onlines.data])
         })
     })
 

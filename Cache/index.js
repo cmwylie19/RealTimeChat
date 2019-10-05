@@ -76,15 +76,16 @@ app.post('/img/:id', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log("connected " + socket.id)
+    socket.emit("connection",socket.id)
     socket.on('connection', () => socket.broadcast.emit("userSignin"))
     io.on("newMessageClient", data => {
         console.log("newCLientMessageIO " + data)
-        io.broadcast.emit("newMessageServer", data)
+        io.emit("newMessageServer", data)
     }
     );
     socket.on("newMessageClient", data => {
         console.log("newCLientMessageSoCKET " + JSON.stringify(data))
-        socket.emit("newMessageServer", data)
+        io.emit("newMessageServer", data)
     });
 
 
