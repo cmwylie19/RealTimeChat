@@ -2,6 +2,8 @@ import React, { Fragment, useState, useContent, createContext, useReducer, useEf
 import openSocket from 'socket.io-client';
 import { fetchAll } from '../libs';
 
+
+ const log = msg => alert(JSON.stringify(msg, undefined, 2))
 let SocketContext = createContext();
 
 var io = openSocket('http://localhost:3332');
@@ -11,6 +13,7 @@ export const SocketProvider = (props) => {
     const [msg, setMsg] = useState([]);
     const [socketID, setSocketID] = useState();
     const [currentMessage, setCurrentMessage] = useState({ to: "", from: "", content: "" });
+    const [socketHandshake, setSocketHandshake] = useState();
 
     const { log } = console
     io.on('connection', (socket) => {
