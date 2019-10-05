@@ -28,7 +28,7 @@ import { orangeTheme, blueTheme, greenTheme } from '../assets/themes'
 import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibility/accessibility';
 import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { css } from '@patternfly/react-styles';
-import { BellIcon, CogIcon } from '@patternfly/react-icons';
+import { BellIcon, CogIcon, MessagesIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
 import { useHistory, useTheme, useUser,SocketConsumer } from '../reducers'
@@ -259,10 +259,12 @@ export default function DashboardContainer() {
           }}>
           {/* Message Section */}
           <Fragment>
-            {Array.apply(0, Array(1)).map((x, i) => (
+          {
+           // socket.msg.filter(message=>message.from === CurrentChat || MessagesIcon.to === CurrentChat)
+          socket.msg.map((message, i) => (
               <Message
-                type={i % 2 === 0 ? "sent" : "received"}
-                body="Hello"
+                type={message.messg.from===email ? "received":"sent"}
+                body={message.messg.content}
                 primary={theme.primary}
               />
             ))}
@@ -270,7 +272,8 @@ export default function DashboardContainer() {
           <Fragment>
             <MessageInput
             id={socket.id}
-            email={username}
+            username={username}
+            sendMsg={msg=>socket.setMessage(msg)}
             CurrentChat={CurrentChat}
             sendDM={(to,from,content)=>socket.sendDM(to,from,content)}
               style={{ display: 'flex' }}

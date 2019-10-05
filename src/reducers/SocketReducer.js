@@ -92,7 +92,7 @@ let SocketContext = createContext();
 
 export const SocketProvider = (props) => {
 
-    const [msg, setMsg] = useState();
+    const [msg, setMsg] = useState([]);
     const [socketID, setSocketID] = useState();
     const [currentMessage, setCurrentMessage] = useState({to:"",from:"",content:""});
     const [socketHandshake, setSocketHandshake] = useState();
@@ -142,7 +142,7 @@ return (
             },
             setSocketHandshake: (handshake) => setSocketHandshake(handshake),
             setCurrentMessage: curr => setCurrentMessage(curr),
-            setMsg: mesg => setMsg(mesg),
+            setMessage: (messg) => setMsg([...msg, {messg}]),
             setSocketID: id => setSocketID(id)
 
         }}>

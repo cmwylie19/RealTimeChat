@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
         let from = message.from;
 
         let user = currentUsers.filter(u=>u.name===to);
-        socket.broadcast.to(user.id).emit('messagePrivate', message);
+        socket.broadcast.to(user.id).emit('messagePrivate', {from:message.from,content:message.content});
 
     })
 

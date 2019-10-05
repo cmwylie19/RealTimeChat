@@ -8,7 +8,7 @@ import {
 import { setCookie } from '../libs';
 
 export default function MessageInput(props) {
-  const [content, setContent] = useState()
+  const [content, setContent] = useState("")
   const inputEl = useRef(null);
   useRef(() => { inputEl.current.focus() })
   useImperativeHandle(inputEl, () => ({
@@ -21,13 +21,14 @@ export default function MessageInput(props) {
       <InputGroup
       >
         <TextArea
-          ref={inputEl}
           value={content}
           onChange={e=>setContent(e)}
           name="textarea2" id="textarea2" aria-label="textarea with button" />
         <Button 
         onClick={()=>{
+          alert(content)
           props.sendDM(props.CurrentChat,props.email, content);
+          props.sendMsg({from:props.username, to:props.CurrentChat,content:content});
           setContent("");
           
         }}
