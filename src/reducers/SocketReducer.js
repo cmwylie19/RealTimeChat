@@ -2,14 +2,14 @@ import React, { Fragment, useState, useContent, createContext, useReducer, useEf
 import openSocket from 'socket.io-client';
 import { fetchAll } from '../libs';
 
-function sanitizeString(message) {
-    return message.replace(/(<([^>]+)>)/ig, '').substring(0, 35);
-}
+// function sanitizeString(message) {
+//     return message.replace(/(<([^>]+)>)/ig, '').substring(0, 35);
+// }
 
-const log = msg => console.log(JSON.stringify(msg, undefined, 2))
+// const log = msg => alert(JSON.stringify(msg, undefined, 2))
 let SocketContext = createContext();
 
-var socket = openSocket('http://localhost:3332');
+var io = openSocket('http://localhost:3332');
 
 export const SocketProvider = (props) => {
     const [online,setOnline]=useState([]);
@@ -18,50 +18,64 @@ export const SocketProvider = (props) => {
     const [currentMessage, setCurrentMessage] = useState({to:"",from:"",content:""});
     const [socketHandshake, setSocketHandshake] = useState();
 
- 
-     socket.on('connection',()=>alert(Object.keys(socket)))
-    socket.on("newConnect",async ()=>{
+    const {log } = console
+     io.on('connection',(socket)=>{
+       
+         alert(Object.keys(socket))
+    io.on("userSignin",async ()=>{
+        alert('userSignIn')
         let onlines = await fetchAll()
         setOnline([...onlines.data])
     })
-    socket.on("newMessageServer",message=>{
-        console.log('msg from server '+JSON.stringify(message))
-        setMsg([...msg,message]);
+    io.on("newMessageServer",(message)=>{
+        alert('MSG FROM THE SERVING TIOP  from server '+JSON.stringify(message))
+        setMsg([...msg, {to:message.to,from:message.from,content:message.context}]);
     })
-    socket.on("userSignin",async ()=>{
+    
+    io.on("userSignin",async ()=>{
+        log("UserSignin")
         let onlines = await fetchAll()
         setOnline([...onlines.data])
     })
-    socket.on("userSignout",async ()=>{
+    io.on("userSignout",async ()=>{
+        log("UserSignin")
         let onlines = await fetchAll()
         setOnline([...onlines.data])
     })
      
-    const sendMessage = message=>socket.emit("newClientMessage",message)
+   //const sendMessage = message=>socket.emit("newClientMessage",message)
     socket.on('disconnect', () => {
         log(`websocket discnnected`);
     })
+})
+
+io.on("newMessageServer",(message)=>{
+    alert('MSG FROM THE SERVING TIOP  from server '+JSON.stringify(message))
+    setMsg([...msg, {to:message.to,from:message.from,content:message.content}]);
+})
 
 return (
     <Fragment>
         <SocketContext.Provider value={{
             id:socketID,
             msg,
+            io,
+            //socket,
             online,
+           // sendMessage:(msg)=>sendMessage(msg),
           //  sendMessage,
             currentMessage,
             socketHandshake,
             updateOnlines:online=>setOnline([...online]),
             sendDM:(to,from,content)=>{
-                console.log(`to it ${to} from ${from} ${content}`)
-                socket.emit('sendMessageClient',{to,from,content})
+                alert(`to it ${to} from ${from} ${content}`)
+                io.emit('sendMessageClient',{to,from,content})
             },
             setSocketHandshake: (handshake) => setSocketHandshake(handshake),
             setCurrentMessage: curr => setCurrentMessage(curr),
             sendMessage: (to,from,content)=>{
-                console.log('sending message to '+to + " from "+from + " of "+content)
-                socket.emit("newMessageClient",{to,from,content});
-                console.log('send message '+to+" from "+from+"content "+content)
+               
+                io.emit("newMessageClient",{to,from,content});
             },
             setSocketID: id => setSocketID(id)
 

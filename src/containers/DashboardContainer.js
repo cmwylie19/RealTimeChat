@@ -32,7 +32,7 @@ import { BellIcon, CogIcon, MessagesIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
 import { useHistory, useTheme, useUser, SocketConsumer } from '../reducers'
-import { logout,parseCookie, deleteSession, getCookie, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
+import { logout, parseCookie, deleteSession, getCookie, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
 import Keycloak from 'keycloak-js';
 
 
@@ -50,18 +50,17 @@ export default function DashboardContainer() {
 
   try {
     var cookie = parseCookie(document.cookie);
-    console.log('dtoken '+cookie.idToken)
   }
-  catch(err){
+  catch (err) {
     console.log(err)
   }
-  
-  
+
+
   useEffect(async () => {
 
     const keycloak = Keycloak('/keycloak.json');
-     if (cookie.idToken === null) {
-      keycloak.init({ flow: 'implicit' })
+    if (cookie.idToken === null) {
+      keycloak.init({ onLoad: 'login-required' })
         .success(async authenticated => {
 
           const { given_name, family_name, preferred_username, name, email } = keycloak.idTokenParsed;
@@ -83,14 +82,14 @@ export default function DashboardContainer() {
             email
           )
           setCookie('idTokenParsed', idTokenParsed)
-          setCookie('keycloak',keycloak)
+          setCookie('keycloak', keycloak)
           setCookie("refreshToken", refreshToken, refreshTokenParsed.exp);
           setCookie("idToken", idToken, idTokenParsed.exp);
           setCookie("token", token, tokenParsed.exp);
           setStorage('keycloak', JSON.stringify(keycloak))
           readCookies();
           kcCopy = Object.assign({}, keycloak);
-          
+
 
           await setSession(idTokenParsed.exp, idToken, preferred_username.split('@')[0])
           let onlines = await fetchAll();
@@ -111,13 +110,13 @@ export default function DashboardContainer() {
           });
         })
     } else {
-   
-     let {log } =console;
+
+      let { log } = console;
       let parsedCookie = parseCookie(document.cookie)
-      log('idTokenParsed '+'\n\n\n'+document.cookie)
-     let cookieUser=JSON.parse(parsedCookie.idTokenParsed)
-     // console.log(decodeURI(idToken))
-      console.log('parsedToken '+JSON.stringify(cookieUser,undefined,2));
+      log('idTokenParsed ' + '\n\n\n' + document.cookie)
+      let cookieUser = JSON.parse(parsedCookie.idTokenParsed)
+      // console.log(decodeURI(idToken))
+      console.log('parsedToken ' + JSON.stringify(cookieUser, undefined, 2));
       userLogin(
         cookieUser.given_name,
         cookieUser.family_name,
@@ -161,12 +160,12 @@ export default function DashboardContainer() {
   const PageNav = (
     <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
       <NavList>
-        {  Array.from(new Set(OnlineUsers))
-        .map((user, i) => {
-          return username !== user && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
-            {user}
-          </NavItem>
-        })}
+        {Array.from(new Set(OnlineUsers))
+          .map((user, i) => {
+            return username !== user && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
+              {user}
+            </NavItem>
+          })}
       </NavList>
     </Nav>
   )
@@ -197,25 +196,25 @@ export default function DashboardContainer() {
     <DropdownItem component="button"
       //onClick={() => history.push('/')
       onClick={async () => {
-        let request = async () => await instance('http://localhost:8080').get('/auth/realms/Chat/logout-all')
+        let request = async () => await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout')
         request.headers = {
-       
-            "Content-Type": "application/x-www-form-urlencoded",
-            'Access-Control-Allow-Origin': 'http://localhost:8080/auth',
-             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-             'Access-Control-Allow-Headers': ' Origin, Content-Type, Authorization, Content-Length, X-Requested-With',
-            'Accept': 'application/x-www-form-urlencoded'
+
+          "Content-Type": "application/x-www-form-urlencoded",
+          'Access-Control-Allow-Origin': 'http://localhost:8080/auth',
+          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+          'Access-Control-Allow-Headers': ' Origin, Content-Type, Authorization, Content-Length, X-Requested-With',
+          'Accept': 'application/x-www-form-urlencoded'
         }
-        let result=await request()
-  //let result =  await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout?redirect_uri=http://localhost:8080/auth/admin',{'mode':'no-cors'})
-     userLogout(); clearCookies();
-     deleteSession(username);
-      console.log('response from logout'+result)
+        let result = await request()
+        //let result =  await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout?redirect_uri=http://localhost:8080/auth/admin',{'mode':'no-cors'})
+        userLogout(); clearCookies();
+        deleteSession(username);
+        console.log('response from logout' + result)
         //  .then(response=>{
-         
+
         //   })
         //  .catch(err=>console.log(`errors during logout `+err))
-         
+
       }}
     >Logout</DropdownItem>
   ];
@@ -300,27 +299,29 @@ export default function DashboardContainer() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between"
+                justifyContent: "flex-end",
+
               }}>
               {/* Message Section */}
               <Fragment>
                 {
-                  // socket.msg.filter(m=>m.messg.from === CurrentChat || m.messg.to === CurrentChat)
-                socket.msg.filter(message=>message.from === CurrentChat || MessagesIcon.to === CurrentChat)
-                 .map((message, i) => {
-                      console.log(Message)
-                   return  <Message
+
+
+                  socket.msg.map((message, i) => {
+                    console.log(message)
+                    return <Message
+                      key={i}
                       type={message.from === username ? "sent" : "received"}
                       body={message.content}
                       primary={theme.primary}
                     />
-                })}
+                  })}
               </Fragment>
               <Fragment>
                 <MessageInput
                   id={socket.id}
                   username={username}
-                  sendMessage={(to,from,content) => socket.sendMessage(to,from,content)}
+                  sendMessage={(to, from, content) => socket.sendMessage(to, from, content)}
                   CurrentChat={CurrentChat}
                   style={{ display: 'flex' }}
                 />

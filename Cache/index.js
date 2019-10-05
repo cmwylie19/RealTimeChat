@@ -68,9 +68,11 @@ app.get('/all', async (req, res) => {
         .send(await fetchAll())
 })
 app.post('/img/:id', (req, res) => {
-    const outfile = createWriteStream(`./${req.params.id}.png`)
+    const outfile = createWriteStream(`./public/${req.params.id}.png`)
     request('http://localhost:3000/logo512.png').pipe(outfile)
+
 })
+
 
 io.on('connection', (socket) => {
     console.log("connected " + socket.id)

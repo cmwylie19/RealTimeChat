@@ -1,6 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
+> curl -X GET http://localhost:8080/auth/realms/Chat/protocol/openid-connect/logout
+
+
+>
+curl -X GET \
+>   http://localhost:8080/auth/realms/Chat/.well-known/uma2-configuration
+{"issuer":"http://localhost:8080/auth/realms/Chat","authorization_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/auth","token_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/token","token_introspection_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/token/introspect","end_session_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/logout","jwks_uri":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/certs","grant_types_supported":["authorization_code","implicit","refresh_token","password","client_credentials"],"response_types_supported":["code","none","id_token","token","id_token token","code id_token","code token","code id_token token"],"response_modes_supported":["query","fragment","form_post"],"registration_endpoint":"http://localhost:8080/auth/realms/Chat/clients-registrations/openid-connect","token_endpoint_auth_methods_supported":["private_key_jwt","client_secret_basic","client_secret_post","client_secret_jwt"],"token_endpoint_auth_signing_alg_values_supported":["RS256"],"scopes_supported":["openid","address","email","microprofile-jwt","offline_access","phone","profile","roles","web-origins"],"resource_registration_endpoint":"http://localhost:8080/auth/realms/Chat/authz/protection/resource_set","permission_endpoint":"http://localhost:8080/auth/realms/Chat/authz/protection/permission","policy_endpoint":"http://localhost:8080/auth/realms/Chat/authz/protection/uma-policy","introspection_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/token/introspect"}casewylie@MacBook-Pro patternfly-react 
 
 In the project directory, you can run:
 
