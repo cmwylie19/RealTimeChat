@@ -12,7 +12,7 @@ export function validNick(nickname) {
     return regex.exec(nickname) !== null;
 }
 
-export function findIndex (arr, id) {
+export function findIndex(arr, id) {
     var len = arr.length;
 
     while (len--) {
@@ -24,8 +24,8 @@ export function findIndex (arr, id) {
     return -1;
 }
 
-export function sanitizeString( message ) {
-    return message.replace(/(<([^>]+)>)/ig,'').substring(0, 35);
+export function sanitizeString(message) {
+    return message.replace(/(<([^>]+)>)/ig, '').substring(0, 35);
 }
 
 
@@ -36,105 +36,64 @@ app.use(cors())
 let server = http.Server(app);
 let io = new SocketIO(server);
 
-let users = [];
-let sockets = {};
-
-app.get('/store/:ex/:key', async (req,res)=>{
+app.get('/store/:ex/:key', async (req, res) => {
     const { key, ex } = req.params;
     const value = req.query.value;
     res
-    .status(200)
-    .header( "Access-Control-Allow-Origin:*")
-    .header("Access-Control-Allow-Credentials: true")
-    .send( await setAsync(`concurrent:${key}`, req.query.value,'EX', ex))
+        .status(200)
+        .header("Access-Control-Allow-Origin:*")
+        .header("Access-Control-Allow-Credentials: true")
+        .send(await setAsync(`concurrent:${key}`, req.query.value, 'EX', ex))
 })
 
-app.get('/name/:id',async (req,res)=>{
+app.get('/name/:id', async (req, res) => {
     res
-    .status(200)
-    .send(await getAsync(`concurrent:${req.params.id}`))
+        .status(200)
+        .send(await getAsync(`concurrent:${req.params.id}`))
 })
 
-app.get('/delete/:id',async (req,res)=>{
+app.get('/delete/:id', async (req, res) => {
     try {
         await delAsync(`concurrent:${req.params.id}`)
         res.send("cool")
     }
-   catch(err){
-       res.send(err.message)
-   }
+    catch (err) {
+        res.send(err.message)
+    }
 })
 
-app.get('/all',async (req,res)=>{
+app.get('/all', async (req, res) => {
     res
-    .status(200)
-    .send(await fetchAll())
+        .status(200)
+        .send(await fetchAll())
 })
-app.post('/img/:id', (req,res)=>{
+app.post('/img/:id', (req, res) => {
     const outfile = createWriteStream(`./${req.params.id}.png`)
     request('http://localhost:3000/logo512.png').pipe(outfile)
 })
 
-let currentUsers = [];
-
 io.on('connection', (socket) => {
-    console.log('new connection '+JSON.stringify(socket.handshake,undefined,2))
-    let handshake = socket.handshake;
-    let currentUser = {
-        id: socket.id,
-        handshake: handshake
-    };
-
-    socket.broadcast.to(socket.id).emit('newUserPrivate', currentUser);
-    socket.on("newUserCreds",creds=> {
-        currentUsers = [...currentUsers,creds]
+    console.log("connected " + socket.id)
+    socket.on('connection', ()=>socket.broadcast.emit("userSignin"))
+    io.on("newMessageClient", data => {
+        console.log("newCLientMessageIO " + data)
+        io.broadcast.emit("newMessageServer", data)
+    }
+    );
+    socket.on("newMessageClient", data => {
+        console.log("newCLientMessageSoCKET " + JSON.stringify(data))
+        socket.emit("newMessageServer", data)
     });
 
-    socket.on("messagePrivate",message=>{
-        console.log("\nGot a private message.\n"+message.content)
-        console.log("\nGfrom \n"+message.from)
-        console.log("\t to \n"+message.to)
-        let to = message.to;
-        let from = message.from;
 
-        let user = currentUsers.filter(u=>u.name===to);
-        socket.broadcast.to(user.id).emit('messagePrivate', {from:message.from,content:message.content});
-
-    })
-
-    socket.on('disconnect', () => {
-        //currentUsers.handshake;
-    //    if (findIndex(currentUsers, currentUser) > -1) users.splice(findIndex(users, currentUser.id), 1);
-        console.log('[INFO] User ' + currentUser.nick + ' disconnected!');
-       // socket.broadcast.emit('userDisconnect', {name: currentUsers[index].name});
-    });
-
+    socket.on('disconnect', ()=>socket.broadcast.emit("userSignout"))
+   // socket.on("connect", () => io.emit("userSignin"));
 });
 
-server.listen(process.env.PORT,()=>{
+
+
+
+server.listen(process.env.PORT, () => {
     console.log(`We are up listening on ${process.env.PORT}`)
 })
 
-// // sending to sender-client only
-// socket.emit('message', "this is a test");
-
-// // sending to all clients, include sender
-// io.emit('message', "this is a test");
-
-// // sending to all clients except sender
-// socket.broadcast.emit('message', "this is a test");
-
-// // sending to all clients in 'game' room(channel) except sender
-// socket.broadcast.to('game').emit('message', 'nice game');
-
-// // sending to all clients in 'game' room(channel), include sender
-// io.in('game').emit('message', 'cool game');
-
-// // sending to sender client, only if they are in 'game' room(channel)
-// socket.to('game').emit('message', 'enjoy the game');
-
-// // sending to all clients in namespace 'myNamespace', include sender
-// io.of('myNamespace').emit('message', 'gg');
-
-// // sending to individual socketid
-// socket.broadcast.to(socketid).emit('message', 'for your eyes only');

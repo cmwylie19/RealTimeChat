@@ -31,8 +31,8 @@ import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon, MessagesIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb } from '../components'
-import { useHistory, useTheme, useUser,SocketConsumer } from '../reducers'
-import { logout,deleteSession, getCookie,setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
+import { useHistory, useTheme, useUser, SocketConsumer } from '../reducers'
+import { logout,parseCookie, deleteSession, getCookie, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
 import Keycloak from 'keycloak-js';
 
 
@@ -40,62 +40,100 @@ let kcCopy;
 export default function DashboardContainer() {
 
   const theme = useTheme();
-  const {name, avatar, email, userLogin, userLogout} = useUser();
+  const { name, avatar, email, userLogin, userLogout } = useUser();
   const [OnlineUsers, setOnlineUsers] = useState([]);
   const [CurrentChat, setCurrentChat] = useState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
-  const [username,setUsername] =useState();
-  
-  useEffect(() => {
-    const keycloak = Keycloak('/keycloak.json');
-    !getCookie('idToken') && keycloak.init({ onLoad: 'login-required' })
-      .success(async authenticated => {
-        
-        const { given_name, family_name, preferred_username, name,email } = keycloak.idTokenParsed;
-        const { refreshToken,refreshTokenParsed, idToken, idTokenParsed, token, tokenParsed} = keycloak;
-        const { realm_access, resource_access} = keycloak.tokenParsed;
-        let realmAccessRoles = realm_access.roles;
-        let accountRoles = resource_access.account.roles
-        setUsername(preferred_username.split('@')[0]);
-        userLogin(
-          given_name,
-          family_name,
-          preferred_username,
-          name,
-          refreshToken,
-          idToken,
-          token,
-          accountRoles,
-          realmAccessRoles,
-          email
-        )
-        setCookie("refreshToken", refreshToken, refreshTokenParsed.exp);
-        setCookie("idToken", idToken, idTokenParsed.exp);
-        setCookie("token", token, tokenParsed.exp);
-        setStorage('keycloak', JSON.stringify(keycloak))
-        readCookies();
-          kcCopy = Object.assign({},keycloak);
+  const [username, setUsername] = useState();
 
-        await setSession(idTokenParsed.exp,idToken,preferred_username.split('@')[0])
-        let onlines = await fetchAll();
-        
-        setOnlineUsers([...onlines.data])
-        setCurrentChat(onlines.data[0])
-     
+  try {
+    var cookie = parseCookie(document.cookie);
+    console.log('dtoken '+cookie.idToken)
+  }
+  catch(err){
+    console.log(err)
+  }
+  
+  
+  useEffect(async () => {
+
+    const keycloak = Keycloak('/keycloak.json');
+     if (cookie.idToken === null) {
+      keycloak.init({ flow: 'implicit' })
+        .success(async authenticated => {
+
+          const { given_name, family_name, preferred_username, name, email } = keycloak.idTokenParsed;
+          const { refreshToken, refreshTokenParsed, idToken, idTokenParsed, token, tokenParsed } = keycloak;
+          const { realm_access, resource_access } = keycloak.tokenParsed;
+          let realmAccessRoles = realm_access.roles;
+          let accountRoles = resource_access.account.roles
+          setUsername(preferred_username.split('@')[0]);
+          userLogin(
+            given_name,
+            family_name,
+            preferred_username,
+            name,
+            refreshToken,
+            idToken,
+            token,
+            accountRoles,
+            realmAccessRoles,
+            email
+          )
+          setCookie('idTokenParsed', idTokenParsed)
+          setCookie('keycloak',keycloak)
+          setCookie("refreshToken", refreshToken, refreshTokenParsed.exp);
+          setCookie("idToken", idToken, idTokenParsed.exp);
+          setCookie("token", token, tokenParsed.exp);
+          setStorage('keycloak', JSON.stringify(keycloak))
+          readCookies();
+          kcCopy = Object.assign({}, keycloak);
+          
+
+          await setSession(idTokenParsed.exp, idToken, preferred_username.split('@')[0])
+          let onlines = await fetchAll();
+
+          setOnlineUsers([...onlines.data])
+          setCurrentChat(onlines.data[0])
+
           keycloak.updateToken(70).success(refreshed => {
-          if (refreshed) {
-            console.debug('Token refreshed' + refreshed);
-            setStorage("REFRESH-TOKEN", JSON.stringify(refreshed))
-          } else {
-            console.warn('Token not refreshed, valid for '
-              + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
-          }
-        }).error(() => {
-          console.error('Failed to refresh token');
-        });
-      })
+            if (refreshed) {
+              console.debug('Token refreshed' + refreshed);
+              setStorage("REFRESH-TOKEN", JSON.stringify(refreshed))
+            } else {
+              console.warn('Token not refreshed, valid for '
+                + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
+            }
+          }).error(() => {
+            console.error('Failed to refresh token');
+          });
+        })
+    } else {
+   
+     let {log } =console;
+      let parsedCookie = parseCookie(document.cookie)
+      log('idTokenParsed '+'\n\n\n'+document.cookie)
+     let cookieUser=JSON.parse(parsedCookie.idTokenParsed)
+     // console.log(decodeURI(idToken))
+      console.log('parsedToken '+JSON.stringify(cookieUser,undefined,2));
+      userLogin(
+        cookieUser.given_name,
+        cookieUser.family_name,
+        cookieUser.preferred_username,
+        cookieUser.name,
+        parsedCookie.refreshToken,
+        parsedCookie.idToken,
+        parsedCookie.token,
+        null,
+        null,
+        cookieUser.email
+      )
+      setUsername(cookieUser.preferred_username.split('@')[0]);
+      let onlines = await fetchAll();
+      setOnlineUsers([...onlines.data])
+    }
   }, {})
 
 
@@ -120,27 +158,15 @@ export default function DashboardContainer() {
   }
 
 
-  const PageNav =(
-     <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
+  const PageNav = (
+    <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
       <NavList>
-        {OnlineUsers.map((user,i)=>{
-         return <NavItem itemId={i} isActive={activeItem === i} onClick={()=>setCurrentChat(OnlineUsers[i])}>
-           {user}
-           </NavItem>
+        {  Array.from(new Set(OnlineUsers))
+        .map((user, i) => {
+          return username !== user && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
+            {user}
+          </NavItem>
         })}
-       
-        {/* <NavItem itemId={1} isActive={activeItem === 1}>
-          Eric Murphy
-          </NavItem>
-        <NavItem itemId={2} isActive={activeItem === 2}>
-          Marshall Powell
-          </NavItem>
-        <NavItem itemId={3} isActive={activeItem === 3}>
-          Deven Phillips
-          </NavItem> */}
-        {/* <NavItem itemId={4} isActive={activeItem === 4}>
-          Server
-          </NavItem> */}
       </NavList>
     </Nav>
   )
@@ -170,8 +196,27 @@ export default function DashboardContainer() {
     <DropdownItem>Separated Link</DropdownItem>,
     <DropdownItem component="button"
       //onClick={() => history.push('/')
-      onClick={()=>{
-        kcCopy.logout() && userLogout() && clearCookies() && deleteSession(username)}}
+      onClick={async () => {
+        let request = async () => await instance('http://localhost:8080').get('/auth/realms/Chat/logout-all')
+        request.headers = {
+       
+            "Content-Type": "application/x-www-form-urlencoded",
+            'Access-Control-Allow-Origin': 'http://localhost:8080/auth',
+             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+             'Access-Control-Allow-Headers': ' Origin, Content-Type, Authorization, Content-Length, X-Requested-With',
+            'Accept': 'application/x-www-form-urlencoded'
+        }
+        let result=await request()
+  //let result =  await instance('http://localhost:8080').get('/auth/realms/Chat/protocol/openid-connect/logout?redirect_uri=http://localhost:8080/auth/admin',{'mode':'no-cors'})
+     userLogout(); clearCookies();
+     deleteSession(username);
+      console.log('response from logout'+result)
+        //  .then(response=>{
+         
+        //   })
+        //  .catch(err=>console.log(`errors during logout `+err))
+         
+      }}
     >Logout</DropdownItem>
   ];
   const PageToolbar = (
@@ -231,58 +276,59 @@ export default function DashboardContainer() {
   return (
     <Fragment>
       <SocketConsumer>
-      {socket=>(
-      <Page
-        style={{ height: "100vh" }}
-        header={Header}
-        sidebar={Sidebar}
-        isManagedSidebar
-        skipToContent={PageSkipToContent}
-        breadcrumb={PageBreadcrumb}
-        mainContainerId={pageId}
-      >
-        <PageSection variant={PageSectionVariants.light}>
-          <TextContent>
-            <Text component="h1"
-              style={{ color: theme.secondary }}>{CurrentChat}</Text>
-            <Text component="p">
-              Online Since 3:15pm<br />
-              AppDev CoE
+        {socket => (
+          <Page
+            style={{ height: "100vh" }}
+            header={Header}
+            sidebar={Sidebar}
+            isManagedSidebar
+            skipToContent={PageSkipToContent}
+            breadcrumb={PageBreadcrumb}
+            mainContainerId={pageId}
+          >
+            <PageSection variant={PageSectionVariants.light}>
+              <TextContent>
+                <Text component="h1"
+                  style={{ color: theme.secondary }}>{CurrentChat}</Text>
+                <Text component="p">
+                  Online Since 3:15pm<br />
+                  AppDev CoE
               </Text>
-          </TextContent>
-        </PageSection>
-        <PageSection
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between"
-          }}>
-          {/* Message Section */}
-          <Fragment>
-          {
-           // socket.msg.filter(message=>message.from === CurrentChat || MessagesIcon.to === CurrentChat)
-          socket.msg.map((message, i) => (
-              <Message
-                type={message.messg.from===email ? "received":"sent"}
-                body={message.messg.content}
-                primary={theme.primary}
-              />
-            ))}
-          </Fragment>
-          <Fragment>
-            <MessageInput
-            id={socket.id}
-            username={username}
-            sendMsg={msg=>socket.setMessage(msg)}
-            CurrentChat={CurrentChat}
-            sendDM={(to,from,content)=>socket.sendDM(to,from,content)}
-              style={{ display: 'flex' }}
-            />
-          </Fragment>
+              </TextContent>
+            </PageSection>
+            <PageSection
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between"
+              }}>
+              {/* Message Section */}
+              <Fragment>
+                {
+                  // socket.msg.filter(m=>m.messg.from === CurrentChat || m.messg.to === CurrentChat)
+                socket.msg.filter(message=>message.from === CurrentChat || MessagesIcon.to === CurrentChat)
+                 .map((message, i) => {
+                      console.log(Message)
+                   return  <Message
+                      type={message.from === username ? "sent" : "received"}
+                      body={message.content}
+                      primary={theme.primary}
+                    />
+                })}
+              </Fragment>
+              <Fragment>
+                <MessageInput
+                  id={socket.id}
+                  username={username}
+                  sendMessage={(to,from,content) => socket.sendMessage(to,from,content)}
+                  CurrentChat={CurrentChat}
+                  style={{ display: 'flex' }}
+                />
+              </Fragment>
 
-        </PageSection>
-      </Page>
-      )}
+            </PageSection>
+          </Page>
+        )}
       </SocketConsumer>
     </Fragment>
   );
