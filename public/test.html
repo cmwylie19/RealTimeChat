@@ -1,275 +1,309 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>ChatClient</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="main.css" />
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
 </head>
+
 <body>
-        <script>
-                var socket = io('http://localhost:3332');
-                socket.on('connect',()=>{
-                    document.getElementById("status").innerHTML="Connected";
-                })
-                socket.on('NEW_CONNECT',(data)=>{
-                    document.getElementById("socket.id").innerHTML=data;
-                })
-                socket.on('news', function (data) {
-                  console.log(data);
-                  socket.emit('my other event', { my: 'data' });
+    <input type="file" onchange="readFile(this)">
+
+    <input type="file" onchange="showFile(this)">
+    <script>
+        colors = ["pink", "grey", "white", "lightblue"];
+setInterval(()=>document.body.style.backgroundColor=colors[Math.floor((Math.random() * 4) + 1)] ,3000)
+
+        colors = ["pink", "grey", "white", "lightblue"];
+        oldDiv.addEventListener("click", function (event) {
+            oldDiv.style.backgroundColor = event.detail.color
+        });
+
+        oldDiv.onclick = () => oldDiv.dispatchEvent(new CustomEvent("click", {
+            detail: { color: colors[Math.floor((Math.random() * 4) + 1)] }
+        }));
+
+        function readFile(input) {
+            let file = input.files[0];
+
+            let reader = new FileReader();
+
+            reader.readAsText(file);
+
+            reader.onload = function () {
+                console.log(reader.result);
+            };
+
+            reader.onerror = function () {
+                console.log(reader.error);
+            };
+
+        }
+
+        function showFile(input) {
+            let file = input.files[0];
+
+            alert(`File name: ${file.name}`); // e.g my.png
+            alert(`Last modified: ${file.lastModified}`); // e.g 1552830408824
+        }
+
+        var resource = document.createElement('script');
+        resource.src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js";
+        var script = document.getElementsByTagName('script')[0];
+        script.parentNode.insertBefore(resource, script);
+
+        var socket = io('http://localhost:3332');
+        socket.on('connect', () => {
+            document.getElementById("status").innerHTML = "Connected";
+        })
+        socket.on('NEW_CONNECT', (data) => {
+            document.getElementById("socket.id").innerHTML = data;
+        })
+        socket.on('news', function (data) {
+            console.log(data);
+            socket.emit('my other event', { my: 'data' });
+        });
+
+
+        function sanitizeString(message) {
+            return message.replace(/(<([^>]+)>)/ig, '').substring(0, 35);
+        }
+        function validNick(nickname) {
+            var regex = /^\w*$/;
+            return regex.exec(nickname) !== null;
+        }
+
+        class Chat {
+            constructor(nick) {
+                this.latency = 0;
+                this.chatInput = document.getElementById('chatInput');
+                this.chatList = document.getElementById('chatList');
+                this.nick = nick;
+                this.socket = io('http://localhost:3332', { query: "nick=" + nick });
+                this.commands = {};
+
+                this.setupSocket();
+                this.setupChat();
+                this.setupEvents();
+                this.startPingTime = Date.now();
+                this.socket.emit('ding');
+            }
+
+            setupSocket() {
+                this.socket.on('dong', () => {
+                    this.latency = Date.now() - this.startPingTime;
+                    this.addSystemLine('Ping: ' + this.latency + 'ms');
                 });
-             
 
-function sanitizeString( message ) {
-    return message.replace(/(<([^>]+)>)/ig,'').substring(0, 35);
-}
-function validNick(nickname) {
-    var regex = /^\w*$/;
-    return regex.exec(nickname) !== null;
-}
+                this.socket.on('connect_failed', () => {
+                    this.socket.close();
+                });
 
- class Chat {
-    constructor(nick) {
-        this.latency=0;
-        this.chatInput = document.getElementById('chatInput');
-        this.chatList = document.getElementById('chatList');
-        this.nick = nick;
-        this.socket = io('http://localhost:3332',{query: "nick=" + nick});
-        this.commands = {};
+                this.socket.on('disconnect', () => {
+                    this.socket.close();
+                });
 
-        this.setupSocket();
-        this.setupChat();
-        this.setupEvents();
-        this.startPingTime = Date.now();
-        this.socket.emit('ding');
-    }
+                this.socket.on('userDisconnect', (data) => {
+                    this.addSystemLine('<b>' + (data.nick.length < 1 ? 'Anon' : data.nick) + '</b> disconnected.');
+                });
 
-    setupSocket() {
-        this.socket.on('dong', () => {
-            this.latency = Date.now() - this.startPingTime;
-            this.addSystemLine('Ping: ' + this.latency + 'ms');
-        });
+                this.socket.on('userJoin', (data) => {
+                    // alert('userJoin')
+                    this.addSystemLine('<b>' + (data < 1 ? 'Anon' : data.nick) + '</b> joined.');
+                });
 
-        this.socket.on('connect_failed', () => {
-            this.socket.close();
-        });
-
-        this.socket.on('disconnect', () => {
-            this.socket.close();
-        });
-
-        this.socket.on('userDisconnect', (data) => {
-            this.addSystemLine('<b>' + (data.nick.length < 1 ? 'Anon' : data.nick) + '</b> disconnected.');
-        });
-
-        this.socket.on('userJoin', (data) => {
-            // alert('userJoin')
-            this.addSystemLine('<b>' + (data < 1 ? 'Anon' : data.nick) + '</b> joined.');
-        });
-
-        this.socket.on('serverSendUserChat', (data) => {
-            this.addChatLine(data.nick, data.message, false);
-        });
-    }
-
-    setupChat() {
-        this.registerCommand('ping', 'Check your latency.', () => {
-        //     this.startPingTime = Date.now();
-        // this.socket.emit('ding');
-        this.checkLatency();
-        });
-
-        this.registerCommand('help', 'Information about the chat commands.', () => {
-            this.printHelp();
-        });
-
-        this.addSystemLine('Connected to the chat!');
-        this.addSystemLine('Type <b>/help</b> for a list of commands.');
-    }
-
-    setupEvents() {
-        this.chatInput.addEventListener('keypress', (key) => {
-            key = key.which || key.keyCode;
-            if (key === 13) {
-                this.sendChat(sanitizeString(this.chatInput.value));
-                this.chatInput.value = '';
+                this.socket.on('serverSendUserChat', (data) => {
+                    this.addChatLine(data.nick, data.message, false);
+                });
             }
-        });
 
-        this.chatInput.addEventListener('keyup', (key) => {
-            key = key.which || key.keyCode;
-            if (key === 27) {
-                this.chatInput.value = '';
+            setupChat() {
+                this.registerCommand('ping', 'Check your latency.', () => {
+                    //     this.startPingTime = Date.now();
+                    // this.socket.emit('ding');
+                    this.checkLatency();
+                });
+
+                this.registerCommand('help', 'Information about the chat commands.', () => {
+                    this.printHelp();
+                });
+
+                this.addSystemLine('Connected to the chat!');
+                this.addSystemLine('Type <b>/help</b> for a list of commands.');
             }
-        });
-    }
 
-    sendChat(text) {
-        if (text) {
-            if (text.indexOf('/') === 0) {
-                let args = text.substring(1).split(' ');
+            setupEvents() {
+                this.chatInput.addEventListener('keypress', (key) => {
+                    key = key.which || key.keyCode;
+                    if (key === 13) {
+                        this.sendChat(sanitizeString(this.chatInput.value));
+                        this.chatInput.value = '';
+                    }
+                });
 
-                if (this.commands[args[0]]) {
-                    this.commands[args[0]].callback(args.slice(1));
+                this.chatInput.addEventListener('keyup', (key) => {
+                    key = key.which || key.keyCode;
+                    if (key === 27) {
+                        this.chatInput.value = '';
+                    }
+                });
+            }
+
+            sendChat(text) {
+                if (text) {
+                    if (text.indexOf('/') === 0) {
+                        let args = text.substring(1).split(' ');
+
+                        if (this.commands[args[0]]) {
+                            this.commands[args[0]].callback(args.slice(1));
+                        } else {
+                            this.addSystemLine('Unrecognized Command: ' + text + ', type /help for more info.');
+                        }
+
+                    } else {
+                        this.socket.emit('userChat', { nick: this.nick, message: text });
+                        this.addChatLine(this.nick, text, true);
+                    }
+                }
+            }
+
+            addChatLine(name, message, me) {
+                let newline = document.createElement('li');
+
+                newline.className = (me) ? 'me' : 'friend';
+                newline.innerHTML = '<b>' + ((name.length < 1) ? 'Anon' : name) + '</b>: ' + message;
+
+                this.appendMessage(newline);
+            }
+
+            addSystemLine(message) {
+                let newline = document.createElement('li');
+
+                newline.className = 'system';
+                newline.innerHTML = message;
+
+                this.appendMessage(newline);
+            }
+
+            appendMessage(node) {
+                // if (this.chatList.childNodes.length > 10) {
+                //     this.chatList.removeChild(this.chatList.childNodes[0]);
+                // }
+                this.chatList.appendChild(node);
+            };
+
+            registerCommand(name, description, callback) {
+                this.commands[name] = {
+                    description: description,
+                    callback: callback
+                };
+            };
+
+            printHelp() {
+                for (let cmd in this.commands) {
+                    if (this.commands.hasOwnProperty(cmd)) {
+                        this.addSystemLine('/' + cmd + ': ' + this.commands[cmd].description);
+                    }
+                }
+            };
+
+            checkLatency() {
+                this.startPingTime = Date.now();
+                this.socket.emit('ding');
+            }
+        }
+
+
+        class Client {
+            constructor() {
+
+                let btn = document.getElementById('startButton'),
+                    userNameInput = document.getElementById('userNameInput');
+
+                btn.onclick = () => {
+                    this.startChat(userNameInput.value);
+                };
+
+                userNameInput.addEventListener('keypress', (e) => {
+                    let key = e.which || e.keyCode;
+
+                    if (key === 13) {
+                        this.startChat(userNameInput.value);
+                    }
+                });
+            }
+
+            startChat(nick) {
+                let nickErrorText = document.querySelector('#startMenu .input-error');
+
+                if (validNick(nick)) {
+                    nickErrorText.style.opacity = 0;
+                    this.nick = nick;
                 } else {
-                    this.addSystemLine('Unrecognized Command: ' + text + ', type /help for more info.');
+                    nickErrorText.style.opacity = 1;
+                    return false;
                 }
 
-            } else {
-                this.socket.emit('userChat', {nick: this.nick, message: text});
-                this.addChatLine(this.nick, text, true);
+                this.chat = new Chat(this.nick);
+
+                document.getElementById('startMenu').style.display = 'none';
+                document.getElementById('chatbox').style.display = 'block';
             }
         }
-    }
 
-    addChatLine(name, message, me) {
-        let newline = document.createElement('li');
-
-        newline.className = (me) ? 'me' : 'friend';
-        newline.innerHTML = '<b>' + ((name.length < 1) ? 'Anon' : name) + '</b>: ' + message;
-
-        this.appendMessage(newline);
-    }
-
-    addSystemLine(message) {
-        let newline = document.createElement('li');
-
-        newline.className = 'system';
-        newline.innerHTML = message;
-
-        this.appendMessage(newline);
-    }
-
-    appendMessage(node) {
-        // if (this.chatList.childNodes.length > 10) {
-        //     this.chatList.removeChild(this.chatList.childNodes[0]);
-        // }
-        this.chatList.appendChild(node);
-    };
-
-    registerCommand(name, description, callback) {
-        this.commands[name] = {
-            description: description,
-            callback: callback
+        window.onload = () => {
+            new Client();
         };
-    };
+        var input;
+        var openFile = function (event) {
+            input = event.target;
 
-    printHelp() {
-        for (let cmd in this.commands) {
-            if (this.commands.hasOwnProperty(cmd)) {
-                this.addSystemLine('/' + cmd + ': ' + this.commands[cmd].description);
-            }
-        }
-    };
-
-    checkLatency() {
-        this.startPingTime = Date.now();
-        this.socket.emit('ding');
-    }
-}
-
-
-class Client {
-    constructor () {
-     
-        let btn = document.getElementById('startButton'),
-            userNameInput = document.getElementById('userNameInput');
-        
-        btn.onclick = () => {
-            this.startChat(userNameInput.value);
+            var reader = new FileReader();
+            reader.onload = function () {
+                var dataURL = reader.result;
+                var output = document.getElementById('output');
+                output.src = dataURL;
+            };
+            reader.readAsDataURL(input.files[0]);
         };
 
-        userNameInput.addEventListener('keypress', (e) => {
-            let key = e.which || e.keyCode;
+        var send = function () {
+            var request = new XMLHttpRequest();
+            // POST to httpbin which returns the POST data as JSON
+            request.open('POST', 'http://localhost:3332/img',/* async = */ false);
 
-            if (key === 13) {
-                this.startChat(userNameInput.value);
-            }
-        });
-    }
+            var formData = new FormData();
+            let file = document.querySelector("input[type=file]")
+            // formData.append('file',file[0]);
+            formData.append("writeName", "case")
 
-    startChat(nick) {
-        let nickErrorText = document.querySelector('#startMenu .input-error');
+            //formData.append('key2', 'value2');
 
-        if (validNick(nick)) {
-            nickErrorText.style.opacity = 0;
-            this.nick = nick;
-        } else {
-            nickErrorText.style.opacity = 1;
-            return false;
-        }
-
-        this.chat = new Chat(this.nick);
-
-        document.getElementById('startMenu').style.display = 'none';
-        document.getElementById('chatbox').style.display = 'block';
-    }
-}
-
-window.onload = () => {
-    new Client();
-};
-var input;
-var openFile = function(event) {
-     input = event.target;
-
-    var reader = new FileReader();
-    reader.onload = function(){
-      var dataURL = reader.result;
-      var output = document.getElementById('output');
-      output.src = dataURL;
-    };
-    reader.readAsDataURL(input.files[0]);
-  };
-
-  var send = function() {
-    var request = new XMLHttpRequest();
-    // POST to httpbin which returns the POST data as JSON
-    request.open('POST', 'http://localhost:3332/img' ,/* async = */ false);
-
-    var formData = new FormData();
-    let file = document.querySelector("input[type=file]")    
-    // formData.append('file',file[0]);
-    formData.append("writeName","case")
-    
-    //formData.append('key2', 'value2');
- 
-    request.send(formData)
-    alert(request.response);
-  };
+            request.send(formData)
+            alert(request.response);
+        };
 
 
-//   fetch('/', {
-//     method: 'POST',
-//     body: form
-//   }).then(response => {
-//     return response.blob();
-//   });
+    </script>
+    <div id="status">Disconnected</div>
 
-//   fetch(url, {
-//     method: 'POST',
-//     body: formData,
-//   }).then(response => {
-//     console.log(response)
-//   })
-
-              </script>
-               <div id="status">Disconnected</div>
-             
-               <div id="socket.id">Sup</div>
-               <input type='file' accept='image/*' onchange='openFile(event)'><br>
-               <img id='output' src="logo192.png">
-               <button onclick='send()'>Send</button>
+    <div id="socket.id">Sup</div>
+    <input type='file' accept='image/*' onchange='openFile(event)'><br>
+    <img id='output' src="logo192.png">
+    <button onclick='send()'>Send</button>
     <div class="chatbox" id="chatbox">
         <ul id="chatList" class="chat-list"></ul>
-      
+
         <input id="chatInput" type="text" class="chat-input" placeholder="Chat here..." maxlength="35" />
-      
+
     </div>
     <div id="startMenu">
-        <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="userNameInput" maxlength="25" />
+        <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="userNameInput"
+            maxlength="25" />
         <b class="input-error">Nick must be alphanumeric characters only!</b>
         <br />
         <a></a>
@@ -277,4 +311,5 @@ var openFile = function(event) {
     </div>
     <script src="client.js"></script>
 </body>
+
 </html>

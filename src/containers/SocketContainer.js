@@ -1,11 +1,109 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useContent, createContext, useReducer, useEffect } from 'react'
 import io from 'socket.io-client';
 
 function sanitizeString( message ) {
     return message.replace(/(<([^>]+)>)/ig,'').substring(0, 35);
 }
 
-export const SocketContainer = () =>
+var clients = [];
+io.sockets.on('connection', function (socket) {
+  clients.push(socket.id);
+});
+
+StatContext = createContext();
+
+const initialState= {
+    latency:0
+};
+const StatReducer = (state={},action) => {
+    switch(action.type){
+        case "SET_LATENCY":
+            return {...state,latency:action.payload}
+        default:
+            return {...state}
+    }
+}
+const StatProvider = ({children}) => {
+    const [state,dispatch] = useReducer(StatReducer,initialState)
+    return (
+        <StatContext.Provider value={{
+            latency:state.latency,
+            setLatency:latency=>dispatch({type:"SET_LATENCY",payload:latency})
+        }}>
+            {children}
+        </StatContext.Provider>
+    )
+}
+const StatConsumer = StatContext.Consumer;
+const socketActions = () => {
+    const checkLatency=()=> {
+        setStartPingTime = Date.now();
+        socket.emit('ding');
+    }
+
+    const sanitizeMessage = msg => {
+        return sanitizeString(msg)
+    }
+
+    
+   
+}
+const eventSetup = socket => {
+    socket.on('dong', () => {
+        setLatency(Date.now() - startPingTime);
+        addSystemLine('Ping: ' + latency + 'ms');
+    });
+
+    socket.on('connect_failed', () => {
+        socket.close();
+    });
+
+    socket.on('disconnect', () => {
+        socket.close();
+    });
+
+    socket.on('userDisconnect', (data) => {
+        addSystemLine('<b>' + (data.nick.length < 1 ? 'Anon' : data.nick) + '</b> disconnected.');
+    });
+
+    socket.on('userJoin', (data) => {
+        // alert('userJoin')
+        addSystemLine('<b>' + (data < 1 ? 'Anon' : data.nick) + '</b> joined.');
+    });
+
+    socket.on('serverSendUserChat', (data) => {
+        addChatLine(data.nick, data.message, false);
+    });
+
+}
+const SocketContainer = ({...props},socket) => {
+
+    const [startPingTime, setStartPingTime] = useState();
+    useEffect(()=>{})
+    
+    return (
+        <Fragment>
+            {children}
+        </Fragment>
+    )
+}
+export const SocketContainer = () => {
+    
+    socket.on('connect',()=>{
+
+    })
+    socket.on('disconnect')
+    socket.on('add-user', function(data){
+        clients[data.username] = {
+          "socket": socket.id
+        };
+      });
+    return (
+        <Fragment>
+
+        </Fragment>
+    )
+}
     <Fragment>
         <ThemeProvider>
             <UserProvider>
