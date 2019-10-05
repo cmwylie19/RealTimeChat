@@ -60,8 +60,8 @@ app.get('/all',async (req,res)=>{
     .status(200)
     .send(await fetchAll())
 })
-app.post('/img',async (req,res)=>{
-    const outfile = createWriteStream('./log1o.png')
+app.post('/img/:id', (req,res)=>{
+    const outfile = createWriteStream(`./${req.params.id}.png`)
     request('http://localhost:3000/logo512.png').pipe(outfile)
 })
 

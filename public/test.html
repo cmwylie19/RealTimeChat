@@ -65,7 +65,7 @@ function validNick(nickname) {
         });
 
         this.socket.on('userJoin', (data) => {
-            alert('userJoin')
+            // alert('userJoin')
             this.addSystemLine('<b>' + (data < 1 ? 'Anon' : data.nick) + '</b> joined.');
         });
 
