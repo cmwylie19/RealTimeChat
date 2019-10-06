@@ -8,33 +8,39 @@ const initialState = {
 
 const ThemeReducer = (state = {}, action) => {
     switch (action.type) {
+
         case "CUSTOM_BG_COLOR":
             return {
                 ...state,
                 backgroundColor: action.payload
             }
+
         case "CUSTOM_THEME":
             return {
                 ...action.payload
             }
+
         case "ORANGE_THEME":
             return {
                 ...state,
                 primary: orangeTheme.primary,
                 secondary: orangeTheme.secondary
             }
+
         case "GREEN_THEME":
             return {
                 ...state,
                 primary: greenTheme.primary,
                 secondary: greenTheme.secondary
             }
+
         case "BLUE_THEME":
             return {
                 ...state,
                 primary: blueTheme.primary,
                 secondary: blueTheme.secondary
             }
+            
         default:
             return state
     }
