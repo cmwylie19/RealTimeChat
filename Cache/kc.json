@@ -1,8 +1,8 @@
 {
-  "realm": "SkyHouse",
+  "realm": "Chat",
   "auth-server-url": "http://localhost:8080/auth",
   "ssl-required": "external",
-  "resource": "front",
+  "resource": "cache",
   "public-client": true,
   "confidential-port": 0
 }

@@ -6,6 +6,15 @@ import request from 'request'
 import cors from 'cors'
 import { getAsync, setAsync, fetchAll, delAsync } from './redis-client'
 import { createWriteStream } from 'fs';
+import session from 'express-session'
+import Keycloak from 'keycloak-connect'
+// var memoryStore = new session.MemoryStore();
+
+// var keycloak = new Keycloak({ store: memoryStore },require('./kc.json'));
+// //keycloak.getToken();
+//  keycloak = new Keycloak({ scope: 'offline_access' },require('./kc.json'))
+// console.log(keycloak.stores)
+
 
 export function validNick(nickname) {
     var regex = /^\w*$/;
@@ -31,11 +40,27 @@ export function sanitizeString(message) {
 
 dotenv.config();
 const app = express();
+//session
+// app.use(session({
+//     secret:'thisShouldBeLongAndSecret',
+//     resave: false,
+//     saveUninitialized: true,
+//     store: memoryStore
+//   }));
 app.use(cors())
+// app.use( keycloak.middleware() );
+// app.use( keycloak.middleware( { logout: '/'} ));
+app.use(express.static('public'))
+
 
 let server = http.Server(app);
 let io = new SocketIO(server);
 
+
+
+app.get('/',(req,res)=>{
+    res.render(__dirname+'/public/index.html')
+})
 app.get('/store/:ex/:key', async (req, res) => {
     const { key, ex } = req.params;
     const value = req.query.value;
@@ -72,6 +97,10 @@ app.post('/img/:id', (req, res) => {
     request('http://localhost:3000/logo512.png').pipe(outfile)
 
 })
+// app.get('/apis/me', keycloak.enforcer('user:profile', {response_mode: 'token'}), function (req, res) {
+//     var token ;
+//      token = req.kauth.grant.access_token.content;
+// })
 
 
 io.on('connection', (socket) => {
