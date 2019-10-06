@@ -3,13 +3,11 @@ import {
   LoginMainFooterBandItem,
   LoginPage
 } from '@patternfly/react-core';
-import Keycloak from 'keycloak-js';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { BackgroundImages as images } from '../assets/images/BackgroundImages'
 import {SignUpForAccountMessage, LoginAccountMessage, FormSignup,ForgotCreds, HelpLinks, FormLogin, SocialMediaLoginContent} from '../components' 
 import { useHistory, useUser } from '../reducers'
-
 
 export default function LandingContainer() {
     const user = useUser();
@@ -25,26 +23,17 @@ export default function LandingContainer() {
 
     const history = useHistory();
 
-    useEffect(()=>{
-      const keycloak = Keycloak('/keycloak.json');
-      keycloak.init({onLoad: 'login-required'})
-      .success(authenticated => {
-        setKeycloak(keycloak);
-        setAuthenticated(authenticated)
-      })
-    })
+    const handleUsernameChange = value => {
+      setUsernameValue( value );
+    }
 
-  const handleUsernameChange = value => {
-    setUsernameValue( value );
-  }
+    const handlePasswordChange = passwordValue => {
+      setPasswordValue(passwordValue)
+    }
 
-  const handlePasswordChange = passwordValue => {
-    setPasswordValue(passwordValue)
-  }
-
-  const onRememberMeClick = () => {
-   setRememberMeChecked(!this.state.isRememberMeChecked);
-  }
+    const onRememberMeClick = () => {
+    setRememberMeChecked(!this.state.isRememberMeChecked);
+    }
 
   const onLoginButtonClick = event => {
     event.preventDefault();
@@ -52,7 +41,6 @@ export default function LandingContainer() {
     setIsValidPassword(!!passwordValue);
     setShowHelperText(!this.state.usernameValue || !this.state.passwordValue);
   }
-
   
     const helperText = (
       <React.Fragment>
@@ -61,7 +49,6 @@ export default function LandingContainer() {
       </React.Fragment>
     );
 
-
     const signUpForAccountMessage = (
       <LoginMainFooterBandItem>
         Need an account? 
@@ -69,9 +56,6 @@ export default function LandingContainer() {
       </LoginMainFooterBandItem>
     );
 
-    
-
-    
     return (
       <LoginPage
         footerListVariants="inline"
