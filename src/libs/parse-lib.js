@@ -5,3 +5,5 @@ export function validNick(nickname) {
     var regex = /^\w*$/;
     return regex.exec(nickname) !== null;
 }
+
+export const isWhiteSpaceOrNull = (str) => str.trim().length > 0
