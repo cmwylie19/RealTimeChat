@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { ListItem, LoginFooterItem } from '@patternfly/react-core'
 
-export const HelpLinks = (
+const HelpLinks = (
   <Fragment>
     <ListItem>
       <LoginFooterItem href="#">Terms of Use </LoginFooterItem>
@@ -14,3 +14,5 @@ export const HelpLinks = (
     </ListItem>
   </Fragment>
 );
+
+export default HelpLinks;
