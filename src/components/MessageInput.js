@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef, Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   Button,
   ButtonVariant,
@@ -6,6 +6,7 @@ import {
   InputGroup,
 } from '@patternfly/react-core';
 import { isWhiteSpaceOrNull } from '../libs'
+
 export default function MessageInput(props) {
   const [content, setContent] = useState("");
   const { CurrentChat, username, sendMessage } = props;
@@ -16,6 +17,7 @@ export default function MessageInput(props) {
     }
     setContent("");
   }
+
   return (
     <Fragment>
       <InputGroup>
