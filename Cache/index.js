@@ -53,7 +53,8 @@ app.get('/all', async (req, res) => {
 
 app.post('/img/:id', (req, res) => {
     const outfile = createWriteStream(`./public/${req.params.id}.png`)
-    request('http://localhost:3000/logo512.png').pipe(outfile)
+    request('http://localhost:3000/logo512.png')
+    .pipe(outfile)
 })
 
 io.on('connection', (socket) => {
