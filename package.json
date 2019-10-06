@@ -1,5 +1,5 @@
 {
-  "name": "chatroom",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -44,5 +44,24 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "Patternfly-Chat is a real time chat application that allows communication both group and individual communication. Its' micro services architecture features three principle resources. There is an authentication system which leverages Keycloak and which makes management of client applications, users, and assignment of permissions and roles extremely simple. The second resource that the application relies heavily on is a Cache. The cache provides functionality for the expiration of sessions and picture of who is using the app at what time. The code is divided so far into a front end into two small services. A front end that is written in React, and a Node service that interacts with the cache. This app was originally being written for a blog post so the idea is to keep things as simple as possible.",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmwylie19/patternfly-chat.git"
+  },
+  "keywords": [
+    "React",
+    "Socket.io",
+    "Cache",
+    "Keycloak"
+  ],
+  "author": "Casey Wylie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmwylie19/patternfly-chat/issues"
+  },
+  "homepage": "https://github.com/cmwylie19/patternfly-chat#readme"
 }

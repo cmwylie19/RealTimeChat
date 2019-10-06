@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react'
 import { UserLogo } from '../assets/images'
-
+import { log } from '../libs'
 
 var initialState = {
     given_name: "",
@@ -22,8 +22,9 @@ var initialState = {
 
 const UserReducer = (state = {}, action) => {
     switch (action.type) {
+
         case "USER_LOGIN":
-            console.log(`USER_LOGIN\n\n+${JSON.stringify(action.payload)}`)
+            log(`USER_LOGIN\n\n+${JSON.stringify(action.payload)}`)
             return {
                 ...state,
                 given_name: action.payload.given_name,
@@ -37,6 +38,7 @@ const UserReducer = (state = {}, action) => {
                 realmAccessRoles: action.payload.realmAccessRoles,
                 email: action.payload.email
             }
+
         case "USER_LOGOUT":
             return {
                 ...state,
@@ -51,21 +53,47 @@ const UserReducer = (state = {}, action) => {
                 realmAccessRoles: null,
                 email: null
             }
+
         case "SET_GIVEN_NAME":
-            return { ...state, given_name: action.payload }
+            return {
+                 ...state, 
+                 given_name: action.payload 
+                }
+
         case "SET_FAMILY_NAME":
-            return { ...state, family_name: action.payload }
+            return {
+                 ...state, 
+                 family_name: action.payload 
+                }
+
         case "SET_EMAIL":
-            return { ...state, email: action.payload }
+            return { 
+                ...state, 
+                email: action.payload
+             }
+
         case "SET_REMEMBER":
-            return { ...state, remember: action.payload }
+            return { 
+                ...state,
+                remember: action.payload 
+            }
+
         case "SET_TOKEN":
-            return { ...state, token: action.payload }
+            return {
+                 ...state, token: action.payload
+                }
+
         case "SET_AVATAR":
-            return { ...state, avatar: action.payload }
+            return {
+                 ...state, avatar: action.payload 
+                }
+
         case "SET_ONLINE_USERS":
-            console.log(`OnlineUsers reducer ${JSON.stringify(action.payload)}`)
-            return { ...state, OnlineUsers: action.payload }
+            log(`OnlineUsers reducer ${JSON.stringify(action.payload)}`)
+            return {
+                 ...state, OnlineUsers: action.payload
+                 }
+                 
         default:
             return state
     }

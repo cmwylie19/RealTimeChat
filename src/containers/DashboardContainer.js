@@ -28,11 +28,11 @@ import { orangeTheme, blueTheme, greenTheme } from '../assets/themes'
 import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibility/accessibility';
 import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { css } from '@patternfly/react-styles';
-import { BellIcon, CogIcon, MessagesIcon } from '@patternfly/react-icons';
+import { BellIcon, CogIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
 import { Message, MessageInput, PageBreadcrumb, Upload } from '../components'
-import { useHistory, useTheme, useUser, SocketConsumer } from '../reducers'
-import { logout, parseCookie, deleteSession, getCookie, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
+import { useTheme, useUser, SocketConsumer } from '../reducers'
+import { parseCookie, deleteSession, setStorage, setSession, readCookies, setCookie, fetchAll, clearCookies } from '../libs'
 import Keycloak from 'keycloak-js';
 
 
@@ -261,8 +261,6 @@ export default function DashboardContainer() {
   const pageId = 'main-content-page-layout-default-nav';
   const PageSkipToContent = <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>;
 
-
-  const history = useHistory();
   return (
     <Fragment>
       <SocketConsumer>
