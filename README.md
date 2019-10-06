@@ -1,75 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Patternfly-Chat
 
-## Available Scripts
-> curl -X GET http://localhost:8080/auth/realms/Chat/protocol/openid-connect/logout
+Patternfly-Chat is a real time chat application that allows communication both group and individual communication. Its' micro services architecture features three principle resources. There is an authentication system which leverages Keycloak and which makes management of client applications, users, and assignment of permissions and roles extremely simple. The second resource that the application relies heavily on is a Cache. The cache provides functionality for the expiration of sessions and picture of who is using the app at what time. The code is divided so far into a front end into two small services. A front end that is written in React, and a Node service that interacts with the cache. This app was originally being written for a blog post so the idea is to keep things as simple as possible.
 
 
->
-curl -X GET \
->   http://localhost:8080/auth/realms/Chat/.well-known/uma2-configuration
-{"issuer":"http://localhost:8080/auth/realms/Chat","authorization_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/auth","token_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/token","token_introspection_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/token/introspect","end_session_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/logout","jwks_uri":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/certs","grant_types_supported":["authorization_code","implicit","refresh_token","password","client_credentials"],"response_types_supported":["code","none","id_token","token","id_token token","code id_token","code token","code id_token token"],"response_modes_supported":["query","fragment","form_post"],"registration_endpoint":"http://localhost:8080/auth/realms/Chat/clients-registrations/openid-connect","token_endpoint_auth_methods_supported":["private_key_jwt","client_secret_basic","client_secret_post","client_secret_jwt"],"token_endpoint_auth_signing_alg_values_supported":["RS256"],"scopes_supported":["openid","address","email","microprofile-jwt","offline_access","phone","profile","roles","web-origins"],"resource_registration_endpoint":"http://localhost:8080/auth/realms/Chat/authz/protection/resource_set","permission_endpoint":"http://localhost:8080/auth/realms/Chat/authz/protection/permission","policy_endpoint":"http://localhost:8080/auth/realms/Chat/authz/protection/uma-policy","introspection_endpoint":"http://localhost:8080/auth/realms/Chat/protocol/openid-connect/token/introspect"}casewylie@MacBook-Pro patternfly-react 
+# Resources
 
-In the project directory, you can run:
+All of the resources used in this app are run in docker containers. Everything is accessible locally and extremely simple and fast to spin up. In the future i would like to write a version of the Cache Service in TypeScript and a mobile version in React Native but for now the focus is on completing the app and making it **progressive!**
 
-### `npm start`
+## Cache Service
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+We are using a Redis container for the Cache. To pull and run the container locally you will use:
+> docker run -d -p 6379:6379 redis
+> docker start redis
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+The second command is not critical but is there just incase of errors.
 
-### `npm test`
+CACHE API
+The api for the cache has three endpoints. One for storing a session in the cache with an expiration date, another for retrieving a single key from the cache, one for deleting a key from the cache, and one for pulling all of the keys from the cache. Users are stores into the cache in a composite key so we can still have the functionality to expire each individual session, but all iterate over the whole group.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+##### Store keys
+> curl http://localhost:3332/store/10000/myKey\?value=valueOfKey
+> curl http://localhost:3332/store/10000/birthMonth\?value=July
 
-### `npm run build`
+##### Retrieve keys
+ > curl http://localhost:3332/name/myKey
+ > curl http://localhost:3332/name/birthMonth
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+##### Delete Keys
+> curl http://localhost:3332/delete/myKey
+> curl http://localhost:3332/delete/birthMonth
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+##### Fetch All Keys
+> curl http://localhost:3332/all
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Auth Service
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+We are using a Redis container to start and run our keycloak instance to manage our identity pools and authentication. To pull and run the container locally you just have to specify a default user, database, and the port.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -e DB_VENDOR=H2 jboss/keycloak
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Next, go to http://localhost:8080/auth/admin to start configuring your keycloak instance.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Hover over the left panel and you will notice a button appears that says, "Create Realm", click the button to create a realm, give it a name, then click the top login tab in the top of the same page you are on. Click Allow User Registration so that it has an ON state.
 
-## Learn More
+Next configure the clients, which are our front and backend services. Click on the "Clients" left panel. Create two clients, one is frontend, make sure the Valid Redirect URIs are consistent which the URIs of the apps. Also make sure the access type is set to Public. The last thing you will need to do is click on the installation tab in the top right and then select Keycloak IODC JSON from the selector that is labeled Format Options. Copy that file for each client service into the public directory.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+# Running the Project
+To run the project run npm install and npm start on both the Cache service and the React app. Make sure you have the correct URLs and you should be well on your way to developing.
