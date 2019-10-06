@@ -30,7 +30,7 @@ import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacin
 import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon, MessagesIcon } from '@patternfly/react-icons';
 import { HatLogo } from '../assets/images'
-import { Message, MessageInput, PageBreadcrumb } from '../components'
+import { Message, MessageInput, PageBreadcrumb, Upload } from '../components'
 import { useHistory, useTheme, useUser, SocketConsumer } from '../reducers'
 import { logout, parseCookie, deleteSession, getCookie, setStorage, setSession, readCookies, setCookie, instance, getStorage, fetchAll, clearCookies } from '../libs'
 import Keycloak from 'keycloak-js';
@@ -41,7 +41,8 @@ var cookie;
 export default function DashboardContainer() {
 
   const theme = useTheme();
-  const { name, avatar, email, userLogin, userLogout } = useUser();
+  const [edit, setEdit] = useState(false);
+  const { name, avatar, email, userLogin, userLogout, setAvatar } = useUser();
   const [OnlineUsers, setOnlineUsers] = useState([]);
   const [CurrentChat, setCurrentChat] = useState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -50,20 +51,16 @@ export default function DashboardContainer() {
   const [username, setUsername] = useState();
 
   try {
-     cookie = parseCookie(document.cookie);
+    cookie = parseCookie(document.cookie);
   }
   catch (err) {
     console.log(err)
   }
-
-
   useEffect(async () => {
-
     const keycloak = Keycloak('/keycloak.json');
     if (cookie === null || cookie === undefined) {
       keycloak.init({ onLoad: 'login-required' })
         .success(async authenticated => {
-
           const { given_name, family_name, preferred_username, name, email } = keycloak.idTokenParsed;
           const { refreshToken, refreshTokenParsed, idToken, idTokenParsed, token, tokenParsed } = keycloak;
           const { realm_access, resource_access } = keycloak.tokenParsed;
@@ -193,11 +190,13 @@ export default function DashboardContainer() {
       Disabled Action
       </DropdownItem>,
     <DropdownSeparator />,
-    <DropdownItem>Separated Link</DropdownItem>,
+    <DropdownItem onClick={() => setEdit(!edit)}>Edit Avatar</DropdownItem>,
     <DropdownItem component="button"
       //onClick={() => history.push('/')
       onClick={async () => {
         clearCookies();
+        userLogout();
+        deleteSession(username);
         //logout(clearCookies())
         // clearCookies();
         // deleteSession(username);
@@ -254,7 +253,7 @@ export default function DashboardContainer() {
     <PageHeader
       logo={<Brand src={HatLogo} alt="Patternfly Logo" />}
       toolbar={PageToolbar}
-      avatar={<Avatar src={avatar} alt="Avatar image" />}
+      avatar={<Upload avatar={avatar} setAvatar={setAvatar} edit={edit} toggleEdit={() => setEdit(!edit)} />}
       showNavToggle
     />
   );
@@ -294,20 +293,16 @@ export default function DashboardContainer() {
                 justifyContent: "flex-end",
 
               }}>
-              {/* Message Section */}
               <Fragment>
-                {
-
-
-                  socket.msg.map((message, i) => {
-                    console.log(message)
-                    return <Message
-                      key={i}
-                      type={message.from === username ? "sent" : "received"}
-                      body={message.content}
-                      primary={theme.primary}
-                    />
-                  })}
+                {socket.msg.map((message, i) => {
+                  console.log(message)
+                  return <Message
+                    primary={theme.primary}
+                    key={i}
+                    type={message.from === username ? "sent" : "received"}
+                    body={message.content}
+                  />
+                })}
               </Fragment>
               <Fragment>
                 <MessageInput

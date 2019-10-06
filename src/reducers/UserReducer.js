@@ -17,7 +17,7 @@ var initialState = {
     avatar: UserLogo,
     contacts: [],
     messages: [],
-    OnlineUsers:null,
+    OnlineUsers: null,
 }
 
 const UserReducer = (state = {}, action) => {
@@ -63,9 +63,9 @@ const UserReducer = (state = {}, action) => {
             return { ...state, token: action.payload }
         case "SET_AVATAR":
             return { ...state, avatar: action.payload }
-         case "SET_ONLINE_USERS":
-             console.log(`OnlineUsers reducer ${JSON.stringify(action.payload)}`)
-                    return { ...state, OnlineUsers: action.payload }
+        case "SET_ONLINE_USERS":
+            console.log(`OnlineUsers reducer ${JSON.stringify(action.payload)}`)
+            return { ...state, OnlineUsers: action.payload }
         default:
             return state
     }
@@ -107,7 +107,7 @@ export const UserProvider = ({ children }) => {
                     email
                 }
             }),
-            setOnlineUsers: (users) => dispatch({ type: "SET_ONLINE_USERS",payload:users }),
+        setOnlineUsers: (users) => dispatch({ type: "SET_ONLINE_USERS", payload: users }),
         userLogout: () => dispatch({ type: "USER_LOGOUT" }),
         setFirst: given_name => dispatch({ type: "SET_GIVEN_NAME", payload: given_name }),
         setLast: family_name => dispatch({ type: "SET_FAMILY_NAME", payload: family_name }),
