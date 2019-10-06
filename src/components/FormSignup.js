@@ -3,21 +3,17 @@ import {
   Form,
   FormGroup,
   TextInput,
-  TextArea,
-  FormSelectionOption,
-  FormSelect,
   Checkbox,
   ActionGroup,
   Button,
-  Radio,
   Avatar
 } from '@patternfly/react-core';
 import { Upload } from './'
 
 export default function FormSignup(props) {
 
-    const [remember, setRemember] = useState(false)
-    const [pw1, setPW1] = useState('')
+  const [remember, setRemember] = useState(false)
+  const [pw1, setPW1] = useState('')
   const [pw2, setPW2] = useState('')
 
   const [pwSame, setPWsame] = useState(pw1 === pw2)
@@ -41,11 +37,11 @@ export default function FormSignup(props) {
   return (
     <Form>
       <FormGroup
-      label="avatar"
-      isRequired
-      fieldId="avatar"
-      helperText="Please provide avatar">
-      <div>
+        label="avatar"
+        isRequired
+        fieldId="avatar"
+        helperText="Please provide avatar">
+        <div>
           <Avatar style={{ padding: '0', margin: '0', height: '50px', width: '50px' }} src={props.avatar} alt="avatar"></Avatar>
 
           <Upload
@@ -54,7 +50,7 @@ export default function FormSignup(props) {
           />
         </div>
       </FormGroup>
-       <FormGroup
+      <FormGroup
         label="First Name"
         isRequired
         fieldId="first"
@@ -96,9 +92,9 @@ export default function FormSignup(props) {
           onChange={props.setEmail}
         />
       </FormGroup>
-     
+
       <FormGroup label="Password" isRequired fieldId="simple-form-email"
-      helperText="Please provide a password.">
+        helperText="Please provide a password.">
         <TextInput
           isRequired
           type="password"
@@ -109,7 +105,7 @@ export default function FormSignup(props) {
         />
       </FormGroup>
       <FormGroup label="Password" isRequired fieldId="simple-form-email"
-      helperText="Please confirm password.">
+        helperText="Please confirm password.">
         <TextInput
           isRequired
           type="password"
@@ -122,7 +118,7 @@ export default function FormSignup(props) {
 
       </FormGroup>
       <FormGroup fieldId="checkbox1">
-      <Checkbox
+        <Checkbox
           label="Remember me"
           isChecked={remember}
           onChange={handleChange}
@@ -138,7 +134,7 @@ export default function FormSignup(props) {
           onClick={props.onSignupClick}
         //  onClick={() => props.history.push('/dashboard')}
         >Login</Button>
-        <Button 
+        <Button
           isBlock
           variant="secondary"
           onClick={handleCancelClick}
