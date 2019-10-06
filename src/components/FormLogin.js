@@ -3,18 +3,13 @@ import {
   Form,
   FormGroup,
   TextInput,
-  TextArea,
-  FormSelectionOption,
-  FormSelect,
   Checkbox,
   ActionGroup,
-  Button,
-  Radio
+  Button
 } from '@patternfly/react-core';
-import { userInfo } from 'os';
 
 export default function FormLogin(props) {
-  const [checked, setChecked ] = useState(false)
+  const [checked, setChecked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const handleCancelClick = value1 => {
@@ -57,7 +52,7 @@ export default function FormLogin(props) {
         />
       </FormGroup>
       <FormGroup fieldId="checkbox1">
-      <Checkbox
+        <Checkbox
           label="Remember me"
           isChecked={checked}
           onChange={handleChange}
@@ -65,16 +60,16 @@ export default function FormLogin(props) {
           id="check-4"
           name="check4"
         />
-        
+
       </FormGroup>
       <ActionGroup>
         <Button
           isBlock
           variant="primary"
           onClick={props.onLoginClick}
-         // onClick={() => props.history.push('/dashboard')}
+        // onClick={() => props.history.push('/dashboard')}
         >Login</Button>
-        <Button 
+        <Button
           isBlock
           variant="secondary"
           onClick={handleCancelClick}
