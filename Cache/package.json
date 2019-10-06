@@ -1,5 +1,5 @@
 {
-  "name": "web-server",
+  "name": "cache-service",
   "version": "1.0.0",
   "description": "redis-webserver",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "start": "nodemon --exec babel-node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Casey Wylie",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.6.0",
@@ -28,5 +28,19 @@
     "nodemon": "^1.19.2",
     "redis": "^2.8.0",
     "socket.io": "^2.2.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmwylie19/patternfly-chat.git"
+  },
+  "keywords": [
+    "cache",
+    "socket-io",
+    "node"
+  ],
+  "bugs": {
+    "url": "https://github.com/cmwylie19/patternfly-chat/issues"
+  },
+  "homepage": "https://github.com/cmwylie19/patternfly-chat#readme"
 }

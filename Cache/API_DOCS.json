@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "bc7bf995-4de1-4b28-8118-20cab8901086",
+		"name": "CACHE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST http://localhost:3332/img/{FILENAME}",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "access_token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhZ24wNkJfSXpjczFJZWVZMmNjLUhRVm8taWYtV3Q5Ui1rOEVZVEU5QTdBIn0.eyJqdGkiOiI1MDYzMzgwNi0zMjYwLTQ0NjAtYmRkNy1jNWNkM2E3OTA5MTMiLCJleHAiOjE1NzAzMTI1MTEsIm5iZiI6MCwiaWF0IjoxNTcwMzEyMjExLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvQ2hhdCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIyNzI5N2Y0Yy0wNDNmLTQyZDItYjNmNS0xNzNhY2VmODMxNjAiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmcm9udGVuZCIsIm5vbmNlIjoiMGY0ZDg3MjMtN2VjMS00Njc1LThhZTctMjAyYWRkYzdjMWVmIiwiYXV0aF90aW1lIjoxNTcwMzExNjU4LCJzZXNzaW9uX3N0YXRlIjoiMzU5OTZmMmYtYTQ4Ni00ZmVlLWE0NTktZGVkOTY1ZTEyNDAwIiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjMwMDAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoibmV3IGd1eSBuZXciLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJuZXdndXkiLCJnaXZlbl9uYW1lIjoibmV3IGd1eSIsImZhbWlseV9uYW1lIjoibmV3IiwiZW1haWwiOiJjbmV3QG5ldy5jb20ifQ.MZTqV0Wtbx9CVNZ83wTWTvIZ0w4y4N0MdODXyf4saiqVJgaMl5c81chih5z67lqJBV37ZoKUcY6Qu1FaYvqj65FZ9lxOOwH5Fwm4ZmuV9iY2Ivg1ZeKBSUQvZcSOcon8YVUMvyojPFo7pujJqApyScmcIKy7tPvQnMzy76VnBooCzD8ipY99zmPmdAIK5uAZxvafkHTehPBYnBmV9Tnr_t-SEeYeqxV_cN9xQP160bJ86glrPP9q69BWp00h5nUi9fRmka9AzIt2JCQS2TinBT7fZynQHeuuUbwJCeGiVolZtW5cjNX_viatRN78Vhol4-q_kFCmFSgHEljl2YPDzg",
+						"type": "text"
+					},
+					{
+						"key": "expires_in",
+						"value": "300",
+						"type": "text"
+					},
+					{
+						"key": "refresh_expires_in",
+						"value": "1800",
+						"type": "text"
+					},
+					{
+						"key": "refresh_token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxOTk3ZGVhNi1kYjI0LTQ4ODctYTJhYy1kZTJhNDU4ZjAwMGQifQ.eyJqdGkiOiI4NjdlYTQyMi0zMTc1LTQ0ODItOTBhNS02YWFjZjc0ZTJlYjciLCJleHAiOjE1NzAzMTQwMTEsIm5iZiI6MCwiaWF0IjoxNTcwMzEyMjExLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvQ2hhdCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hdXRoL3JlYWxtcy9DaGF0Iiwic3ViIjoiMjcyOTdmNGMtMDQzZi00MmQyLWIzZjUtMTczYWNlZjgzMTYwIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImZyb250ZW5kIiwibm9uY2UiOiIwZjRkODcyMy03ZWMxLTQ2NzUtOGFlNy0yMDJhZGRjN2MxZWYiLCJhdXRoX3RpbWUiOjAsInNlc3Npb25fc3RhdGUiOiIzNTk5NmYyZi1hNDg2LTRmZWUtYTQ1OS1kZWQ5NjVlMTI0MDAiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwifQ._eMvW0wpj-zZvoEraj5idDDH_6raLOo4uqatzTf7bcs",
+						"type": "text"
+					},
+					{
+						"key": "token_type",
+						"value": "bearer",
+						"type": "text"
+					},
+					{
+						"key": "id_token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhZ24wNkJfSXpjczFJZWVZMmNjLUhRVm8taWYtV3Q5Ui1rOEVZVEU5QTdBIn0.eyJqdGkiOiIwZTBjYzg5Zi1hMmNlLTRjYmQtOWIzZi0xNTNhYWExYzk1MGYiLCJleHAiOjE1NzAzMTI1MTEsIm5iZiI6MCwiaWF0IjoxNTcwMzEyMjExLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvQ2hhdCIsImF1ZCI6ImZyb250ZW5kIiwic3ViIjoiMjcyOTdmNGMtMDQzZi00MmQyLWIzZjUtMTczYWNlZjgzMTYwIiwidHlwIjoiSUQiLCJhenAiOiJmcm9udGVuZCIsIm5vbmNlIjoiMGY0ZDg3MjMtN2VjMS00Njc1LThhZTctMjAyYWRkYzdjMWVmIiwiYXV0aF90aW1lIjoxNTcwMzExNjU4LCJzZXNzaW9uX3N0YXRlIjoiMzU5OTZmMmYtYTQ4Ni00ZmVlLWE0NTktZGVkOTY1ZTEyNDAwIiwiYWNyIjoiMCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Im5ldyBndXkgbmV3IiwicHJlZmVycmVkX3VzZXJuYW1lIjoibmV3Z3V5IiwiZ2l2ZW5fbmFtZSI6Im5ldyBndXkiLCJmYW1pbHlfbmFtZSI6Im5ldyIsImVtYWlsIjoiY25ld0BuZXcuY29tIn0.F7nry1lRQeez7rkKjMj3NKkXhxYI-j_2e1z0vwhNn3ISeZBAez2BwKWocXchN_bqvaVttMawP3tdXylKH5shtHd8lP7MFkK0JTjTwlrTKV06bvN8ubOVBUCV7kYqIXIAoTzwTZT3FFygiIVOpX7e8Fe1kkRtHBBN9WuVvxVp2430QuzaDMqedzSM9sPU6njvZhf_ARTox7x2cg9T4l2GGMzavoHa2qWcdmZomnyAvtCjKKEjJvgjeu0YsRHqwcxQvSZW2PvG84rZ6ptBbR9Y71-VPn9U3GsLwUe4ORdKBNWqEKJo3sNSBXcZ-LtKz8FQ1ImwF37zR2AALJ_6rJh8OA",
+						"type": "text"
+					},
+					{
+						"key": "not-before-policy",
+						"value": "0",
+						"type": "text"
+					},
+					{
+						"key": "session_state",
+						"value": "35996f2f-a486-4fee-a459-ded965e12400",
+						"type": "text"
+					},
+					{
+						"key": "scope",
+						"value": "openid profile email",
+						"type": "text"
+					},
+					{
+						"key": "keycloak-toke",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhZ24wNkJfSXpjczFJZWVZMmNjLUhRVm8taWYtV3Q5Ui1rOEVZVEU5QTdBIn0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"filename\":\"sjhit\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3332/img/jordt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"img",
+						"jordt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FETCH ALL KEYS /all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3332/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SAVE A KEY http://localhost:3332/store/{expInSeconds}/{keyname}\\?value={keyvalue}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3332/store/10000/myKey\\?value=myKeyValue",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"store",
+						"10000",
+						"myKey\\"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "myKeyValue"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET A KEY VALUE http://localhost:3332/name/{keyName}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3332/name/myKey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"name",
+						"myKey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE A KEY /delete/{keyName}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3332/delete/myKey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"delete",
+						"myKey"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
