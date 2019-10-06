@@ -307,7 +307,6 @@ export default function DashboardContainer() {
                       key={i}
                       type={message.from === username ? "sent" : "received"}
                       body={message.content}
-                      primary={theme.primary}
                     />
                   })}
               </Fragment>

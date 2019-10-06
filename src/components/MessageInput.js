@@ -11,11 +11,11 @@ import { useKeyListener } from '../libs';
 
 export default function MessageInput(props) {
   const [content, setContent] = useState("");
+  const { CurrentChat, username, sendMessage} = props;
 
-
- const submitMessage = () => { 
-   props.sendMessage(props.CurrentChat, props.username, content);
-  setContent("");
+ function submitMessage() { 
+    sendMessage(CurrentChat, username, content);
+    setContent("");
 }
 
 
