@@ -11,6 +11,7 @@ All of the resources used in this app are run in docker containers. Everything i
 
 We are using a Redis container for the Cache. To pull and run the container locally you will use:
 > docker run -d -p 6379:6379 redis
+________________________________________________________________________________________________________
 > docker start redis
 
 The second command is not critical but is there just incase of errors.
@@ -20,14 +21,17 @@ The api for the cache has three endpoints. One for storing a session in the cach
 
 ##### Store keys
 > curl http://localhost:3332/store/10000/myKey\?value=valueOfKey
+________________________________________________________________________________________________________
 > curl http://localhost:3332/store/10000/birthMonth\?value=July
 
 ##### Retrieve keys
  > curl http://localhost:3332/name/myKey
+ ________________________________________________________________________________________________________
  > curl http://localhost:3332/name/birthMonth
 
 ##### Delete Keys
 > curl http://localhost:3332/delete/myKey
+________________________________________________________________________________________________________
 > curl http://localhost:3332/delete/birthMonth
 
 ##### Fetch All Keys
