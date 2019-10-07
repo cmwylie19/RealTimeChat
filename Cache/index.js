@@ -22,8 +22,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/store/:ex/:key', async (req, res) => {
-    const { key, ex, value } = req.params;
-
+    const { key, ex } = req.params;
+    const  { value } = req.query;
     res.status(200)
         .header("Access-Control-Allow-Origin:*")
         .header("Access-Control-Allow-Credentials: true")

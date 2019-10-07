@@ -159,11 +159,11 @@ export default function DashboardContainer() {
     <Nav onSelect={onNavSelect} aria-label="Nav" theme="dark">
       <NavList>
         {Array.from(new Set(OnlineUsers))
-          .map((user, i) => {
-            return username !== user && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
+          .map((user, i) => (
+             user !== username && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
               {user}
             </NavItem>
-          })}
+          ))}
       </NavList>
     </Nav>
   )
