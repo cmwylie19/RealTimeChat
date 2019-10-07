@@ -22,13 +22,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/store/:ex/:key', async (req, res) => {
-    const { key, ex } = req.params;
-    const value = req.query.value;
+    const { key, ex, value } = req.params;
 
     res.status(200)
         .header("Access-Control-Allow-Origin:*")
         .header("Access-Control-Allow-Credentials: true")
-        .send(await setAsync(`concurrent:${key}`, req.query.value, 'EX', ex))
+        .send(await setAsync(`concurrent:${key}`, value, 'EX', ex))
 })
 
 app.get('/name/:id', async (req, res) => {
@@ -47,8 +46,7 @@ app.get('/delete/:id', async (req, res) => {
 })
 
 app.get('/all', async (req, res) => {
-    res.status(200)
-        .send(await fetchAll())
+    res.status(200).send(await fetchAll())
 })
 
 app.post('/img/:id', (req, res) => {
