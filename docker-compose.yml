@@ -1,0 +1,32 @@
+version: "2"
+services:
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+  keycloak:
+    image: "jboss/keycloak"
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=H2
+    depends_on:
+      - redis
+  cache-service:
+    build: ./Cache
+    ports:
+      - "3332:3332"
+    environment:
+      - REDIS_URL=redis://localhost
+    links:
+      - redis
+    depends_on:
+      - redis
+  frontend:
+    build: ./
+    ports:
+      - "3002:3002"
+    depends_on:
+      - cache-service
