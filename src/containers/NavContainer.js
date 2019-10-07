@@ -5,6 +5,12 @@ import styles from '@patternfly/react-styles/css/components/Tabs/tabs';
 import buttonStyles from '@patternfly/react-styles/css/components/Button/button';
 import { css } from '@patternfly/react-styles';
 let arr = new Array(100)
+
+const MyLink = () => (
+  <a href="http://localhost:3000/prev">
+   Link to Current Version
+  </a>
+)
 export default class NavContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +41,9 @@ export default class NavContainer extends React.Component {
   render() {
     return (
       <Fragment>
+          <h1>Proposed Version</h1>
+        <MyLink/>
+        <br />
         <div style={{ display: 'block', alignItems: 'center' }}>
 
           <Tabs activeKey={this.state.activeTabKey} onSelect={this.handleTabClick} leftScrollAriaLabel="scrollLeft" rightScrollAriaLabel="right">
@@ -97,7 +106,6 @@ export default class NavContainer extends React.Component {
             Tab 3 section
         </Tab>
         </Tabs>
-
       </Fragment>
     );
   }

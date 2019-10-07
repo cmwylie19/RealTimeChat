@@ -5,6 +5,12 @@ import styles from '@patternfly/react-styles/css/components/Tabs/tabs';
 import buttonStyles from '@patternfly/react-styles/css/components/Button/button';
 import { css } from '@patternfly/react-styles';
 let arr = new Array(100)
+
+const MyLink = () => (
+  <a href="http://localhost:3000/nav">
+    Link to Proposed Version
+  </a>
+)
 export default class OldNavContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +28,11 @@ export default class OldNavContainer extends React.Component {
 
   render() {
     return (
-      <Tabs
+      <Fragment>
+        <h1>Current Version</h1>
+         <MyLink />
+         <br />
+         <Tabs
         activeKey={this.state.activeTabKey}
         onSelect={this.handleTabClick}
         aria-label="Local"
@@ -38,6 +48,8 @@ export default class OldNavContainer extends React.Component {
           Tab 3 section
             </Tab>
       </Tabs>
+      </Fragment>
+      
     );
   }
 }
