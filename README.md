@@ -15,7 +15,33 @@ The frontend is React and the Cache is Node with es6 mods.
 
   
 
-## Set Up
+# Backend API
+
+Cache API, assuming the Cache is running on http://localhost:3332.
+
+  
+#### Set Key in Cache
+
+Ex. Store birthMonth to July and give it a time to live of 10 minutes
+> curl http://localhost:3332/store/600/birthMonth\?value=July 
+>
+#### Get Key from Cache
+Ex. get birthMonth
+> curl http://localhost:3332/name/birthMonth
+>
+#### Delete Key
+Ex. Delete birthMonth
+> curl http://localhost:3332/delete/birthMonth
+>
+#### Fetch All Keys
+> curl http://localhost:3332/all 
+>
+________________________________________________________________________________________________________________________________________________________ 
+
+
+
+
+# Set Up
 All of the resources used in this app are run in docker containers. Everything is accessible locally and extremely simple and fast to spin up.
   
   
@@ -45,33 +71,13 @@ All of the resources used in this app are run in docker containers. Everything i
 #### Upload config file from realm-export.json from KeyCloak/Realms/realm-export.json
 
 ![Upload Config](upload.png)
+________________________________________________________________________________________________________________________________________________________
 
-  ____________________________________________________________________________
 #### Front End
 > npm i && npm start
 
 #### Cache 
-> cd Cache; ____________________________________________________________________________
+> cd Cache; 
+________________________________________________________________________________________________________________________________________________________ 
 > npm i && npm start
-
-
-#### CACHE API 
-
-Cache API, assuming the Cache is running on http://localhost:3332.
-
-  
-#### Set Key in Cache
-
-Ex. Store birthMonth to July and give it a time to live of 10 minutes
-> curl http://localhost:3332/store/600/birthMonth\?value=July
-
-#### Get Key from Cache
-Ex. get birthMonth
-> curl http://localhost:3332/name/birthMonth
-
-#### Delete Key
-Ex. Delete birthMonth
-> curl http://localhost:3332/delete/birthMonth
-
-#### Fetch All Keys
-> curl http://localhost:3332/all
+________________________________________________________________________________________________________________________________________________________ 
