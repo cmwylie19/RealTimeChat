@@ -45,7 +45,7 @@ export const SocketProvider = (props) => {
 
         socket.on("PRIVATE_MESSAGE", ({to,from,payload}) => {
             log('\n\n'+'\n\n'+to+" "+from+" "+payload)
-            setMsg([...msg, { to: email, from:from, payload: payload }]);
+            setMsg([...msg, {timestamp:Date.now(), to: email, from:from, payload: payload }]);
         })
        
         
@@ -62,7 +62,7 @@ export const SocketProvider = (props) => {
 
     io.on("PRIVATE_MESSAGE", (message) => {
         log('PRIVATE_MESSAGE\n\n'+JSON.stringify(message)+'\n\n')
-        setMsg([...msg, { to: message.to, from: message.from, payload: message.payload }]);
+        setMsg([...msg, {timestamp:Date.now(), to: message.to, from: message.from, payload: message.payload }]);
     })
 
     

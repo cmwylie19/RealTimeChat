@@ -199,7 +199,8 @@ export default function DashboardContainer() {
 
         document.cookies="";
         userLogout();
-        deleteSession(username);
+        clearCookies();
+        deleteSession(email);
         document.location.href="http://localhost:3000"
         //logout(clearCookies())
         // clearCookies();
@@ -303,6 +304,7 @@ export default function DashboardContainer() {
                   return <Message
                     primary={theme.primary}
                     key={i}
+                    timestamp={new Date(message.timestamp).toTimeString().slice(0,8)}
                     type={message.to === email  ? "received": "sent" }
                     body={message.payload}
                   />
