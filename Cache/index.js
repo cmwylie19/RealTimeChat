@@ -96,15 +96,16 @@ const getUser = (id, UserStore) => {
 }
 
 io.on('connection', async (socket) => {
+
+    socket.broadcast.emit('SET_USER', {id:socket.id});
+
     log("Connection ",socket.id)
     io.emit("ASSOCIATE_USER", { id: socket.id })
 
     
     socket.on("addUser",({to,from,payload}) => {
-    // socket.on("setUser", ({to,from,payload})=>{
         log('addUser\n\n'+'\n\n'+to+" "+from+" "+payload)
-      //log(socket.id + "Set user " + from)
-    // 
+  
         let email = from;
         if (email !== "" && email !== undefined) {
             console.log(socket.id + "Set user " + email)
@@ -120,35 +121,18 @@ io.on('connection', async (socket) => {
         })
 
         socket.on('disconnect', () => {
+           // socket.emit("DEL_USER",{id:socket.id})
             console.log(socket.id + "delete user " + getUser(socket.id,UserStore))
             socket.emit("DEL_USER", { id: socket.id })
+          
         })
 
 
 })
-// io.on("setUser", ({ id, username }) => {
-
-//     if (username !== "" && username !== undefined) {
-//         UserStore = UserReducer(UserStore, { type: "SET_USER", payload: { id, username } })
-//         io.emit("GET_USER", UserReducer(UserStore, { type: "ALL_USERS" }))
-//     }
-//     // UserReducer(UserStore, { type: "SET_USER", payload: { id: id, username: username } })
-// })
-
-
-// socket.on("setUser", ({socket,id,username})=> {
-//     if(username !== "" && username !== undefined){
-//         console.log("Got user "+JSON.stringify(username))
-//         UserReducer(UserStore, { type: "SET_USER", payload: { id: id, username: username } })
-
-//     }
-//    // UserReducer(UserStore, { type: "SET_USER", payload: { id: id, username: username } })
-// })
-io.on('disconnect', (socket) => UserReducer(UserStore, { type: "DEL_USER", payload: { id: socket.id } }))
 
 // io.on('groupMessage', (message) => sc.SocketController(socket,io).groupMessage(message))
-io.on('broadcastMessage', (message) => io.emit.broadcast("BROADCAST_MESSAGE", message))
-io.on('logout', ({ id }) => UserReducer(UserStore, { type: "DEL_USER", payload: { id: id } }))
+//io.on('broadcastMessage', (message) => io.emit.broadcast("BROADCAST_MESSAGE", message))
+//io.on('logout', ({ id }) => UserReducer(UserStore, { type: "DEL_USER", payload: { id: id } }))
 //io.on('connection', (socket) =>console.log("Connected",socket.id))//io.emit("ASSOCIATE_USER",socket.id))
 //io.on('privateMessage', (message) => console.log("PRIVATE MESG", message))
 //io.on("setUser", user => console.log(user.username + " conneced"))
