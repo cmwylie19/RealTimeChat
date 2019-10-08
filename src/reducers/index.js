@@ -13,5 +13,6 @@ export {
     UserConsumer,
     useUser,
     SocketConsumer,
-    SocketProvider
+    SocketProvider,
+    // useSocket
 }

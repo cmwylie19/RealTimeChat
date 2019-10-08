@@ -24,7 +24,7 @@ const UserReducer = (state = {}, action) => {
     switch (action.type) {
 
         case "USER_LOGIN":
-            log(`USER_LOGIN\n\n+${JSON.stringify(action.payload)}`)
+           // log(`USER_LOGIN\n\n+${JSON.stringify(action.payload)}`)
             return {
                 ...state,
                 given_name: action.payload.given_name,

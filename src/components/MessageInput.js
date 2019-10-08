@@ -5,16 +5,13 @@ import {
   TextArea,
   InputGroup,
 } from '@patternfly/react-core';
-import { isWhiteSpaceOrNull } from '../libs'
 
 export default function MessageInput(props) {
   const [content, setContent] = useState("");
   const { CurrentChat, username, sendMessage } = props;
 
   const submitMessage = () => {
-    if (isWhiteSpaceOrNull(content)) {
-      sendMessage(CurrentChat, username, content.trim());
-    }
+      sendMessage(CurrentChat, username, content.toString().trim());
     setContent("");
   }
 

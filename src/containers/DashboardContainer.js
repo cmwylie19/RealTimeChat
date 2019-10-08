@@ -293,12 +293,11 @@ export default function DashboardContainer() {
               }}>
               <Fragment>
                 {socket.msg.map((message, i) => {
-                  console.log(message)
                   return <Message
                     primary={theme.primary}
                     key={i}
-                    type={message.from === username ? "sent" : "received"}
-                    body={message.content}
+                    type={message.from === username || message.from === email ? "sent" : "received"}
+                    body={message.payload}
                   />
                 })}
               </Fragment>
@@ -319,4 +318,3 @@ export default function DashboardContainer() {
     </Fragment>
   );
 }
-
