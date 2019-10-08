@@ -14,7 +14,6 @@ export {
     useUser,
     SocketConsumer,
     SocketProvider,
-    // useSocket
 }
 
 
