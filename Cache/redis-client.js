@@ -1,8 +1,13 @@
+import dotenv from 'dotenv'
 import redis from 'ioredis'
 import bluebird from 'bluebird'
 import { promisify } from 'util'
 
-const client = new redis()
+dotenv.config();
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost'
+const REDIS_PORT = process.env.REDIS_PORT || 6379
+
+const client = new redis(REDIS_PORT,REDIS_HOST)
 bluebird.promisifyAll(client);
 client.set(`concurrent`, '');
 

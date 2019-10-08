@@ -1,0 +1,55 @@
+version: '3.7'
+services:
+  auth:
+    image: jboss/keycloak
+    ports:
+      - '8080:8080'
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: H2
+      KEYCLOAK_IMPORT: /tmp/realm-export.json 
+    volumes:
+      - ./KeyCloak/Realms/realm-export.json:/tmp/realm-export.json
+    networks:  
+      - chat
+    
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    networks: 
+      - chat
+
+
+  frontend:
+    image: frontend
+    build:
+      context: .
+    environment: 
+      PUBLIC_URL: http://frontend
+      REDIS_URL: redis:6379
+    ports: 
+      - "3000:80"
+    networks:  
+      - chat
+    depends_on: 
+      - auth
+
+  backend:
+    image: backend
+    build:
+      context: ./Cache
+    environment: 
+      PORT: 3332  
+      REDIS_HOST: 'redis'
+      REDIS_PORT: 6379
+    ports: 
+      - "3332:3332"
+    networks:  
+      - chat
+    depends_on: 
+      - redis
+networks: 
+  chat:
