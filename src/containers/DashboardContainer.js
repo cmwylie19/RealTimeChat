@@ -89,7 +89,7 @@ export default function DashboardContainer() {
           kcCopy = Object.assign({}, keycloak);
 
 
-          await setSession(idTokenParsed.exp, idToken, preferred_username.split('@')[0])
+          await setSession(idTokenParsed.exp, idToken, preferred_username)
           let onlines = await fetchAll();
 
           setOnlineUsers([...onlines.data])
@@ -127,7 +127,7 @@ export default function DashboardContainer() {
         null,
         cookieUser.email
       )
-      setUsername(cookieUser.preferred_username.split('@')[0]);
+      setUsername(cookieUser.preferred_username);
       let onlines = await fetchAll();
       setOnlineUsers([...onlines.data])
     }
@@ -160,8 +160,8 @@ export default function DashboardContainer() {
       <NavList>
         {Array.from(new Set(OnlineUsers))
           .map((user, i) => (
-             user !== username && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
-              {user}
+             user !== email && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
+              {user.split('@')[0]}
             </NavItem>
           ))}
       </NavList>
@@ -195,8 +195,12 @@ export default function DashboardContainer() {
       //onClick={() => history.push('/')
       onClick={async () => {
         clearCookies();
+        localStorage.clear();
+
+        document.cookies="";
         userLogout();
         deleteSession(username);
+        document.location.href="http://localhost:3000"
         //logout(clearCookies())
         // clearCookies();
         // deleteSession(username);
@@ -292,11 +296,14 @@ export default function DashboardContainer() {
 
               }}>
               <Fragment>
-                {socket.msg.map((message, i) => {
+                {
+                  socket.msg
+                 .filter((messg=>messg.to === email && messg.from === CurrentChat || messg.to===CurrentChat && messg.from===email))
+                .map((message, i) => {
                   return <Message
                     primary={theme.primary}
                     key={i}
-                    type={message.from === username || message.from === email ? "sent" : "received"}
+                    type={message.to === email  ? "received": "sent" }
                     body={message.payload}
                   />
                 })}
@@ -304,8 +311,8 @@ export default function DashboardContainer() {
               <Fragment>
                 <MessageInput
                   id={socket.id}
-                  username={username}
-                  sendMessage={(to, from, content) => socket.sendMessage(to, from, content)}
+                  username={socket.email}
+                  sendMessage={(to, from, payload) => socket.sendMessage(to, from, payload)}
                   CurrentChat={CurrentChat}
                   style={{ display: 'flex' }}
                 />
