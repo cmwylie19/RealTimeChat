@@ -1,43 +1,27 @@
 export let UserStore = {}
-export var UserReducer = (state = { ...UserStore }, action) => {
-    switch (action.type) {
-        case "SET_USER":
-            let store = { ...state };
-            store[action.payload.id] = action.payload.username;
-            state = { ...store };
-            return state;
-        case "DEL_USER":
-            let tempStore = { ...state };
-            Object.entries(state).map((key, index, acc) => {
-                if (key[0] === action.payload.id) {
-                    delete tempStore[key[0]]
-                }
-            })
-            return tempStore;
-        case "ALL_USERS":
-            return { ...state }
-        // case "SET_USER":
-        //     let tempUser = Object.entries(state).map((key, index, acc) => {
-        //         if (key[0] === action.payload.id) {
-        //             return state[key[0]]
 
-        //         }
-        //     })
-        //     return tempStore;
-        default:
-            return state
+export var UserReducer = (state = { ...UserStore }, action) => {
+ switch (action.type) {
+   case "SET_USER":
+    return { ...state, [action.payload.id]:action.payload.username}
+   case "DEL_USER":
+     return Object.entries(state).filter((value,index,acc)=>value[0] !== action.payload.id)
+    case "ALL_USERS":
+     return { ...state }
+     default:
+      return state
     }
 }
-const tempUser = (state, id) => {
-    Object.entries(state).map((key, index, acc) => {
-        if (key[0] === id) {
-            return state[key[0]]
-
-        }
-    })
-}
-UserStore = UserReducer(UserStore, { type: "REMOVE_USER", payload: { id: '2' } })
-UserStore = UserReducer(UserStore, { type: "ADD_USER", payload: { id: 2, username: "Mitch" } })
+function findKey(state, id) {
+ let key = Object.entries(state).map((key, index, acc) => {
+  if (key[0] == id) {
+    return state[key[0]]
+   }
+   })
+   return key
+  }
+UserStore = UserReducer(UserStore, { type: "DEL_USER", payload: { id: '2' } })
+UserStore = UserReducer(UserStore, { type: "SET_USER", payload: { id: 2, username: "Mitch" } })
 UserStore= UserReducer(UserStore, {type:"ALL_USERS"})
 
 export const SocketController = (socket, io) => {

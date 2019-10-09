@@ -13,7 +13,11 @@ The authentication side is leveraged by Keycloak and which makes management of c
 
 The frontend is React and the Cache is Node with es6 mods.
 
-  
+## Build Cache Service
+> docker build -t cacheservice:chatapp .
+> docker build -t frontend:chatapp .
+
+
 
 # Backend API
 

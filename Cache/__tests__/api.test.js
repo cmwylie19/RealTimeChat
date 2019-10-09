@@ -1,6 +1,17 @@
-describe('Flow API', () => {
+describe('UserStore API', () => {
 
-  describe('GET /api/v1/produce - get all produce', () => {
+  describe('Tests for UserStore', () => {
+    // properties expected
+    let expectedProps = { id };
+    it('should return JSON array', () => {
+      return request(app).get('/api/v1/produce')
+      .expect(200)
+      .then(res => {
+        // check that it sends back an array
+        expect(res.body).toBeInstanceOf(Array);
+      });
+    });
+
     // properties expected on an obj in the response
     let expectedProps = ['id', 'name', 'quantity', 'price'];
     it('should return JSON array', () => {

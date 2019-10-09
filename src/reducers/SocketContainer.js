@@ -1,10 +1,9 @@
 import React, { Fragment, useState, createContext, useContext } from 'react'
 import openSocket from 'socket.io-client';
 import { fetchAll, log } from '../libs';
+
 let SocketContext = createContext();
-
 var io;
-
 export const setUser = (id, email) => io.emit({ type: "setUser", payload: { id, email } })
 export const SocketProvider = SocketContext.Provider;
 export const SocketContainer = (props) => {
@@ -18,6 +17,9 @@ export const SocketContainer = (props) => {
     const [socketHandshake, setSocketHandshake] = useState();
 
     io.on('connection', async socket => {
+        log('connected. ' + JSON.stringify(data))
+        log('connected. ' + JSON.stringify(data))
+        const { to, from, content } = data;
         io.on("SET_USER", id => alert(`new user with id of ${id}`))
         io.on("DEL_USER", id => alert('delete user with id of ' + id))
         setID(socket.id)
@@ -53,7 +55,6 @@ export const SocketContainer = (props) => {
         })
     })
 
-
     io.on("BROADCAST_MESSAGE", (message) => {
         setMsg([...msg, { from: message.from, content: message.payload }]);
     })
@@ -78,16 +79,11 @@ export const SocketContainer = (props) => {
             currentMessage={currentMessage}
             socketHandshake={socketHandshake}
             setUser={(email) => {
-
                 setEmail(email)
                 alert(email + "setUser");
                 setU(email)
-
-                // io.to(id).emit("setUser",{id=id,username="cwylie@redhat.com"})
                 io.emit("setUser", { payload= { username= email, id } })
-
             }}
-
             updateOnlines={online => setOnline([...online])}
             sendDM={(to, from, content) => {
                 alert(`to it ${to} from ${from} ${content}`)
@@ -96,12 +92,9 @@ export const SocketContainer = (props) => {
             setSocketHandshake={(handshake) => setSocketHandshake(handshake)}
             setCurrentMessage={curr => setCurrentMessage(curr)}
             sendMessage={(to, from, content) => {
-
                 io.emit("privateMessage", { to, from, payload= content });
             }}
-            setSocketID={id => setSocketID(id)}
-
-        >
+            setSocketID={id => setSocketID(id)} >
             {props.children}
         </Fragment>
 

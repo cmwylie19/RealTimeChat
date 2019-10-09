@@ -40,10 +40,7 @@ app.get('/name/:id', async (req, res) => {
 app.get('/delete/:id', async (req, res) => {
     try {
         await delAsync(`concurrent:${req.params.id}`)
-        res
-        status(200)
-            .contentType('application/json')
-            .send({ data: "successful" })
+        res.status(200) .contentType('application/json').send({ data: "successful" })   
     }
     catch (err) {
         res.send(err.message)
@@ -72,10 +69,8 @@ let UserStore = {}
 export var UserReducer = (state = { ...UserStore }, action) => {
     switch (action.type) {
         case "SET_USER":
-            let store = { ...state };
-            store[action.payload.id] = action.payload.username;
-            state = { ...store };
-            return state;
+            const {id, username} = action.payload;
+           return { ...state, [id]:username }
         case "DEL_USER":
             let tempStore = { ...state };
             Object.entries(state).map((key, index, acc) => {
@@ -101,7 +96,7 @@ const getUser = (id, UserStore) => {
 }
 
 io.on('connection', async (socket) => {
-
+    log("Connection ", socket.id)
     socket.broadcast.emit('SET_USER', { id: socket.id });
 
     log("Connection ", socket.id)
@@ -144,7 +139,7 @@ io.on('connection', async (socket) => {
 
 
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
         log(`We are up listening on ${process.env.PORT}`)
     })
 }
