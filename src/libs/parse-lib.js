@@ -6,4 +6,12 @@ export function validNick(nickname) {
     return regex.exec(nickname) !== null;
 }
 
-export const isWhiteSpaceOrNull = (str) => str.trim().length > 0
+export const isWhiteSpaceOrNull = (str) => {
+    try{
+        return str.trim().length== 0
+    }
+    catch(err){
+        console.error(err);
+        return true;
+    }
+}

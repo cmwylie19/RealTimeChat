@@ -41,5 +41,5 @@ export const fetchAll = async () => {
                 .catch(err => reject(err))
         })
     })
-    
+
 }

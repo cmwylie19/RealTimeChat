@@ -89,7 +89,7 @@ export default function DashboardContainer() {
           kcCopy = Object.assign({}, keycloak);
 
 
-          await setSession(idTokenParsed.exp, idToken, preferred_username.split('@')[0])
+          await setSession(idTokenParsed.exp, idToken, preferred_username)
           let onlines = await fetchAll();
 
           setOnlineUsers([...onlines.data])
@@ -127,7 +127,7 @@ export default function DashboardContainer() {
         null,
         cookieUser.email
       )
-      setUsername(cookieUser.preferred_username.split('@')[0]);
+      setUsername(cookieUser.preferred_username);
       let onlines = await fetchAll();
       setOnlineUsers([...onlines.data])
     }
@@ -160,8 +160,8 @@ export default function DashboardContainer() {
       <NavList>
         {Array.from(new Set(OnlineUsers))
           .map((user, i) => (
-             user !== username && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
-              {user}
+             user !== email && <NavItem itemId={i} isActive={activeItem === i} onClick={() => setCurrentChat(user)}>
+              {user.split('@')[0]}
             </NavItem>
           ))}
       </NavList>
@@ -195,8 +195,17 @@ export default function DashboardContainer() {
       //onClick={() => history.push('/')
       onClick={async () => {
         clearCookies();
+        localStorage.clear();
+
+        document.cookies="";
         userLogout();
-        deleteSession(username);
+        clearCookies();
+        deleteSession(email);
+        return new Promise((resolve,reject)=>{
+          fetch('http://localhost:8080/auth/realms/ChatApp/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Frealms%2FChatApp%2Faccount%2Fpassword')
+        .then(resp=>resolve(resp.url))
+        .catch(err=>reject(err))
+        }).then((url)=>document.location.href=url)
         //logout(clearCookies())
         // clearCookies();
         // deleteSession(username);
@@ -292,21 +301,24 @@ export default function DashboardContainer() {
 
               }}>
               <Fragment>
-                {socket.msg.map((message, i) => {
-                  console.log(message)
+                {
+                  socket.msg
+                 .filter((messg=>messg.to === email && messg.from === CurrentChat || messg.to===CurrentChat && messg.from===email))
+                .map((message, i) => {
                   return <Message
                     primary={theme.primary}
                     key={i}
-                    type={message.from === username ? "sent" : "received"}
-                    body={message.content}
+                    timestamp={new Date(message.timestamp).toTimeString().slice(0,8)}
+                    type={message.to === email  ? "received": "sent" }
+                    body={message.payload}
                   />
                 })}
               </Fragment>
               <Fragment>
                 <MessageInput
                   id={socket.id}
-                  username={username}
-                  sendMessage={(to, from, content) => socket.sendMessage(to, from, content)}
+                  username={socket.email}
+                  sendMessage={(to, from, payload) => socket.sendMessage(to, from, payload)}
                   CurrentChat={CurrentChat}
                   style={{ display: 'flex' }}
                 />
@@ -319,4 +331,3 @@ export default function DashboardContainer() {
     </Fragment>
   );
 }
-

@@ -1,25 +1,35 @@
 import React, { Fragment, useState, createContext } from 'react'
 import openSocket from 'socket.io-client';
 import { fetchAll, log } from '../libs';
-
+import { useUser } from './UserReducer'
 let SocketContext = createContext();
 
 var io = openSocket('http://localhost:3332');
-
+let socket;
 export const SocketProvider = (props) => {
+    const {email,setEmail} = useUser()
     const [online, setOnline] = useState([]);
     const [msg, setMsg] = useState([]);
     const [socketID, setSocketID] = useState();
-    const [currentMessage, setCurrentMessage] = useState({ to: "", from: "", content: "" });
+    const [currentMessage, setCurrentMessage] = useState({ to: "", from: "", payload: "" });
     const [socketHandshake, setSocketHandshake] = useState();
-
-    io.on('connection', socket => {
+    const [ws,setWS]=useState()
+    io.on('connection', async socket => {
+        socket={...socket}
+        let onlines = await fetchAll()
+        setOnline([...onlines.data])
+        setCurrentMessage(onlines[0])
+        setSocketID(socket.id)
+        setWS(socket)
+        alert("Tring to set user : "+email)
+        log("Connection ",socket.id)
+        email !== "" && socket.emit("setUser", {username:email});
 
         io.on('newMessageServer', data => {
             log('Compare data: socket data. ' + JSON.stringify(data))
-            const { to, from, content } = data;
-            setMsg([...msg, { to, from, content }])
-            log('Compare data: stored data. ' + { to, from, content })
+            const { to, from, payload } = data;
+            setMsg([...msg, { to, from, payload }])
+            log('Compare data: stored data. ' + { to, from, payload })
         })
 
         io.on("userSignin", async () => {
@@ -27,14 +37,17 @@ export const SocketProvider = (props) => {
             setOnline([...onlines.data])
         })
 
-        io.on("newMessageServer", (message) => {
-            setMsg([...msg, { to: message.to, from: message.from, content: message.context }]);
+        socket.on("ADD_USER", async ({to,from,payload}) => {
+            // const {to,from,payload}=message;
+            socket.to(socket.id).emit("addUser",{email})
+            io.emit("privateMessage", { to, from, payload });
         })
 
-        io.on("userSignin", async () => {
-            let onlines = await fetchAll()
-            setOnline([...onlines.data])
+        socket.on("PRIVATE_MESSAGE", ({to,from,payload}) => {
+            log('\n\n'+'\n\n'+to+" "+from+" "+payload)
+            setMsg([...msg, {timestamp:Date.now(), to: email, from:from, payload: payload }]);
         })
+       
         
         io.on("userSignout", async () => {
             let onlines = await fetchAll()
@@ -47,9 +60,20 @@ export const SocketProvider = (props) => {
         })
     })
 
-    io.on("newMessageServer", (message) => {
-        setMsg([...msg, { to: message.to, from: message.from, content: message.content }]);
+    io.on("PRIVATE_MESSAGE", (message) => {
+        log('PRIVATE_MESSAGE\n\n'+JSON.stringify(message)+'\n\n')
+        setMsg([...msg, {timestamp:Date.now(), to: message.to, from: message.from, payload: message.payload }]);
     })
+
+    
+
+    const sendMessage= (to, from, payload) => {
+        log('sendMessage\n\n'+'\n\n'+to+" "+from+" "+payload)
+        io.emit("addUser",{to,from,payload});
+  
+        setEmail(from);
+        
+    }
 
     return (
         <Fragment>
@@ -58,19 +82,15 @@ export const SocketProvider = (props) => {
                 msg,
                 io,
                 online,
+                email:email,
                 currentMessage,
                 socketHandshake,
                 updateOnlines: online => setOnline([...online]),
-                sendDM: (to, from, content) => {
-                    alert(`to it ${to} from ${from} ${content}`)
-                    io.emit('sendMessageClient', { to, from, content })
-                },
+      
                 setSocketHandshake: (handshake) => setSocketHandshake(handshake),
                 setCurrentMessage: curr => setCurrentMessage(curr),
-                sendMessage: (to, from, content) => {
-
-                    io.emit("newMessageClient", { to, from, content });
-                },
+                sendMessage: (to, from, payload) => sendMessage( to, from, payload),
+ 
                 setSocketID: id => setSocketID(id)
 
             }}>

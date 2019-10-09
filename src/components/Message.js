@@ -2,11 +2,12 @@ import React from 'react'
 import { Level, LevelItem } from '@patternfly/react-core';
 
 
-const Message = ({ type, body, primary }) => {
+const Message = ({ timestamp, type, body, primary }) => {
     const messageStyle = {
         container: {
             padding: '15px',
-            margin: '15px'
+            margin: '15px',
+
         },
         received: {
             backgroundColor: 'grey',
@@ -17,6 +18,14 @@ const Message = ({ type, body, primary }) => {
             backgroundColor: primary,
             borderRadius: '15px',
             padding: '15px'
+        },
+        bubble: {
+            display: 'flex',
+            alignItems: 'center'
+        },
+
+        timestamp: {
+            fontSize: '.3em'
         }
     }
     return (
@@ -34,7 +43,7 @@ const Message = ({ type, body, primary }) => {
 
             {
                 type === "received" ?
-                    <LevelItem style={messageStyle.received}>{body}</LevelItem> :
+                    <LevelItem style={messageStyle.bubble, messageStyle.received}>{body}<br /><span style={messageStyle.timestamp}>{timestamp}</span></LevelItem> :
                     <LevelItem></LevelItem>
             }
 
@@ -44,7 +53,7 @@ const Message = ({ type, body, primary }) => {
             {/* Messages of type sent */}
             {
                 type === "sent" ?
-                    <LevelItem style={messageStyle.sent}>{body}</LevelItem> :
+                    <LevelItem style={messageStyle.bubble, messageStyle.sent}>{body}<br /><span style={messageStyle.timestamp}>{timestamp}</span></LevelItem> :
                     <LevelItem></LevelItem>
             }
         </Level>
