@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/components/Title/index.ts"],"names":["BaseSizes","TitleSize"],"mappings":"AAAA,cAAc,SAAd;AACA,SAASA,SAAS,IAAIC,SAAtB,QAAuC,oBAAvC","sourcesContent":["export * from './Title';\nexport { BaseSizes as TitleSize } from '../../styles/sizes';\n"],"file":"index.js"}

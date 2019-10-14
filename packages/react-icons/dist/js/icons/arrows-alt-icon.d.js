@@ -1,0 +1,2 @@
+"use strict";
+//# sourceMappingURL=arrows-alt-icon.d.js.map

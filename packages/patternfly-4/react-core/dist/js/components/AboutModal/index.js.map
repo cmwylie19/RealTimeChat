@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/components/AboutModal/index.ts"],"names":[],"mappings":";;;;;;AAAA;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA","sourcesContent":["export * from './AboutModal';\n"],"file":"index.js"}

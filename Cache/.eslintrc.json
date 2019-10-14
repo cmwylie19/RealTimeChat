@@ -1,0 +1,45 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            1
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    },
+    "eslint.workingDirectories": [
+        "./Cache/**/*",
+        "*",
+        "*/*",
+        "*/*/*",
+        "*/src/*",
+        "**/src/**/*",
+        "public" ,// Does not change the process's working directory,
+      { "directory": "public", "changeProcessCWD": true }
+      ]
+    //"eslint.options": { "configFile": "C:/mydirectory/.eslintrc.json" }
+  }

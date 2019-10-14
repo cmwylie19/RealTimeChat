@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Dropdown: dropdown is rendered 1`] = `
+<Uncontrolled(Dropdown)
+  componentClass="li"
+  id="InfoTip"
+  onBlur={[Function]}
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onToggle={[Function]}
+  open={false}
+>
+  children
+</Uncontrolled(Dropdown)>
+`;

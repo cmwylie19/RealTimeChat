@@ -1,0 +1,44 @@
+"use strict";
+
+var React = _interopRequireWildcard(require("react"));
+
+var _BreadcrumbHeading = require("./BreadcrumbHeading");
+
+var _enzyme = require("enzyme");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+describe('BreadcrumbHeading component', function () {
+  test('should render default breadcrumbHeading', function () {
+    var view = (0, _enzyme.shallow)(React.createElement(_BreadcrumbHeading.BreadcrumbHeading, null, "Item"));
+    expect(view).toMatchSnapshot();
+  });
+  test('should pass classname', function () {
+    var view = (0, _enzyme.shallow)(React.createElement(_BreadcrumbHeading.BreadcrumbHeading, {
+      className: "Class"
+    }, "Item"));
+    expect(view).toMatchSnapshot();
+  });
+  test('should pass custom id', function () {
+    var view = (0, _enzyme.shallow)(React.createElement(_BreadcrumbHeading.BreadcrumbHeading, {
+      id: "Id"
+    }, "Item"));
+    expect(view).toMatchSnapshot();
+  });
+  test('should render link breadcrumbTitle', function () {
+    var view = (0, _enzyme.shallow)(React.createElement(_BreadcrumbHeading.BreadcrumbHeading, {
+      to: "/somewhere"
+    }, "Item"));
+    expect(view).toMatchSnapshot();
+  });
+  test('should render breadcrumbHeading with target', function () {
+    var view = (0, _enzyme.shallow)(React.createElement(_BreadcrumbHeading.BreadcrumbHeading, {
+      to: "#here",
+      target: "_blank"
+    }, "Item"));
+    expect(view).toMatchSnapshot();
+  });
+});
+//# sourceMappingURL=BreadcrumbHeading.test.js.map

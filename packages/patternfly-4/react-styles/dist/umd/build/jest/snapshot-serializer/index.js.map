@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../esm/build/jest/snapshot-serializer/index.js"],"names":["default","createSerializer"],"mappings":";;;;;;;;;;;;;;;;;;;;;iDAASA,O;;;;;;yBAASC,gB","sourcesContent":["export { default, createSerializer } from './serializer';\n//# sourceMappingURL=index.js.map"],"file":"index.js"}

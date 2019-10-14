@@ -1,0 +1,45 @@
+{
+  "name": "@patternfly/react-docs",
+  "description": "PatternFly React Docs",
+  "version": "4.13.26",
+  "author": "Red Hat",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build:docs": "yarn build:static && gatsby build --prefix-paths",
+    "build:static": "shx cp -r ../react-core/dist/styles/* static",
+    "clean": "rimraf .cache public static/assets static/base.css",
+    "clean:mdx": "rimraf .cache/caches/gatsby-mdx",
+    "develop": "yarn build:static && gatsby develop",
+    "serve": "gatsby serve --prefix-paths"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "1.0.2",
+    "@mdx-js/react": "1.0.2",
+    "@patternfly/patternfly": "2.33.3",
+    "@patternfly/react-icons": "^3.14.6",
+    "@patternfly/react-virtualized-extension": "^1.2.48",
+    "core-js": "^2.0.0",
+    "gatsby": "2.15.19",
+    "gatsby-mdx": "0.6.3",
+    "gatsby-plugin-react-helmet": "^3.0.11",
+    "gatsby-plugin-sass": "^2.0.11",
+    "gatsby-source-filesystem": "^2.0.28",
+    "gatsby-transformer-json": "^2.1.11",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-helmet": "^5.2.0",
+    "react-live": "^2.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.3",
+    "shx": "^0.3.2"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "browserslist": [
+    "last 2 versions",
+    "not ie <= 11"
+  ]
+}

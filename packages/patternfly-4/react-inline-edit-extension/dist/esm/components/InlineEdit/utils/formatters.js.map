@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../src/components/InlineEdit/utils/formatters.js"],"names":["default","inlineEditFormatterFactory"],"mappings":"AAAA,SAASA,OAAO,IAAIC,0BAApB,QAAsD,yCAAtD","sourcesContent":["export { default as inlineEditFormatterFactory } from './formatters/inlineEditFormatterFactory';\n"],"file":"formatters.js"}

@@ -43,7 +43,10 @@ const Message = ({ timestamp, type, body, primary }) => {
 
             {
                 type === "received" ?
-                    <LevelItem style={messageStyle.bubble, messageStyle.received}>{body}<br /><span style={messageStyle.timestamp}>{timestamp}</span></LevelItem> :
+                    <LevelItem style={messageStyle.bubble}>
+                        <div style={messageStyle.received}>
+                        {body}<br /><span style={messageStyle.timestamp}>{timestamp}</span>
+                            </div></LevelItem> :
                     <LevelItem></LevelItem>
             }
 
@@ -53,7 +56,8 @@ const Message = ({ timestamp, type, body, primary }) => {
             {/* Messages of type sent */}
             {
                 type === "sent" ?
-                    <LevelItem style={messageStyle.bubble, messageStyle.sent}>{body}<br /><span style={messageStyle.timestamp}>{timestamp}</span></LevelItem> :
+                    <LevelItem style={messageStyle.bubble}><div style={messageStyle.sent}>
+                        {body}<br /><span style={messageStyle.timestamp}>{timestamp}</span></div></LevelItem> :
                     <LevelItem></LevelItem>
             }
         </Level>

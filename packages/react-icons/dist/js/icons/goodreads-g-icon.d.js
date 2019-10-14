@@ -1,0 +1,2 @@
+"use strict";
+//# sourceMappingURL=goodreads-g-icon.d.js.map

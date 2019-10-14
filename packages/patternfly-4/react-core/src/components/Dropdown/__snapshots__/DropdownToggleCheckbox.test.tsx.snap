@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`3rd state 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    className=""
+    id="check"
+    isChecked={null}
+    isDisabled={false}
+    isValid={true}
+    onChange={[Function]}
+  />
+</label>
+`;
+
+exports[`controlled 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    className=""
+    id="check"
+    isChecked={true}
+    isDisabled={false}
+    isValid={true}
+    onChange={[Function]}
+  />
+</label>
+`;
+
+exports[`isDisabled 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    className=""
+    id="check"
+    isChecked={false}
+    isDisabled={true}
+    isValid={true}
+    onChange={[Function]}
+  />
+</label>
+`;
+
+exports[`passing HTML attribute 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    aria-labelledby="labelId"
+    className=""
+    id="check"
+    isChecked={true}
+    isDisabled={false}
+    isValid={true}
+    label="label"
+    onChange={[Function]}
+  />
+</label>
+`;
+
+exports[`passing class 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check class-123"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    className=""
+    id="check"
+    isChecked={true}
+    isDisabled={false}
+    isValid={true}
+    label="label"
+    onChange={[Function]}
+  />
+</label>
+`;
+
+exports[`uncontrolled 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    className=""
+    id="check"
+    isChecked={false}
+    isDisabled={false}
+    isValid={true}
+    onChange={[Function]}
+  />
+</label>
+`;
+
+exports[`with text 1`] = `
+<label
+  className="pf-c-dropdown__toggle-check"
+  htmlFor="check"
+>
+  <Checkbox
+    aria-invalid={false}
+    aria-label="check"
+    className=""
+    id="check"
+    isChecked={false}
+    isDisabled={true}
+    isValid={true}
+    onChange={[Function]}
+  />
+  <span
+    aria-hidden="true"
+    className="pf-c-dropdown__toggle-text"
+    id="check-text"
+  >
+    Some text
+  </span>
+</label>
+`;

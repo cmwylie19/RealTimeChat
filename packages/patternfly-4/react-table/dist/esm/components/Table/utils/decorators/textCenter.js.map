@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../../src/components/Table/utils/decorators/textCenter.ts"],"names":["textCenter"],"mappings":"AAAA,OAAO,MAAMA,UAAU,GAAG,OAAO;AAAEA,EAAAA,UAAU,EAAE;AAAd,CAAP,CAAnB","sourcesContent":["export const textCenter = () => ({ textCenter: true });\n"],"file":"textCenter.js"}
