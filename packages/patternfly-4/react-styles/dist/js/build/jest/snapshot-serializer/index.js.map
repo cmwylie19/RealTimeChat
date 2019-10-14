@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../src/build/jest/snapshot-serializer/index.js"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA","sourcesContent":["export { default, createSerializer } from './serializer';\n"],"file":"index.js"}

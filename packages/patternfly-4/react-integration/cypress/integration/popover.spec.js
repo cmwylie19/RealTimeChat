@@ -1,0 +1,21 @@
+describe('Popover Demo Test', function () {
+    it('Navigate to popover section', function () {
+        cy.visit('http://localhost:3000/');
+        cy.get('#popover-demo-nav-item-link').click();
+        cy.url().should('eq', 'http://localhost:3000/popover-demo-nav-link');
+    });
+    it('Launch, Test, and Close Popover', function () {
+        cy.get('div[id="popoverTarget"]').then(function (popoverLink) {
+            cy.get('.tippy-popper').should('not.exist');
+            cy.wrap(popoverLink).click();
+            cy.get('.tippy-popper').should('exist');
+            cy.get('h6').contains('Popover Header');
+            cy.get('.pf-c-popover__body').contains('Popover Body');
+            cy.get('footer').contains('Popover Footer');
+            cy.get('button[aria-label="Close"]').then(function (closeBtn) {
+                cy.wrap(closeBtn).click();
+                cy.get('.tippy-popper').should('not.exist');
+            });
+        });
+    });
+});

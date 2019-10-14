@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../esm/components/Title/index.js"],"names":["BaseSizes"],"mappings":";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;;;oBACSA,S","sourcesContent":["export * from './Title';\nexport { BaseSizes as TitleSize } from '../../styles/sizes';\n//# sourceMappingURL=index.js.map"],"file":"index.js"}

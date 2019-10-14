@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../esm/helpers/htmlConstants.js"],"names":["ASTERISK"],"mappings":";;;;;;;;;;;;;;;;;;AAAO,QAAMA,QAAQ,WAARA,QAAQ,GAAG,GAAjB","sourcesContent":["export const ASTERISK = '*';\n//# sourceMappingURL=htmlConstants.js.map"],"file":"htmlConstants.js"}

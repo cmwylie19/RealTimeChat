@@ -1,0 +1,31 @@
+"use strict";
+
+var React = _interopRequireWildcard(require("react"));
+
+var _enzyme = require("enzyme");
+
+var _Title = require("../Title");
+
+var _ModalBoxHeader = require("./ModalBoxHeader");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+test('ModalBoxHeader Test', function () {
+  var view = (0, _enzyme.shallow)(React.createElement(_ModalBoxHeader.ModalBoxHeader, null, "This is a ModalBox header"));
+  expect(view).toMatchSnapshot();
+});
+test('ModalBoxHeader Test with H3', function () {
+  var view = (0, _enzyme.shallow)(React.createElement(_ModalBoxHeader.ModalBoxHeader, {
+    headingLevel: _Title.TitleLevel.h3
+  }, "This is a ModalBox header"));
+  expect(view).toMatchSnapshot();
+});
+test('ModalBoxHeader Test hideTitle', function () {
+  var view = (0, _enzyme.shallow)(React.createElement(_ModalBoxHeader.ModalBoxHeader, {
+    hideTitle: true
+  }, "This is a ModalBox header"));
+  expect(view).toMatchSnapshot();
+});
+//# sourceMappingURL=ModalBoxHeader.test.js.map

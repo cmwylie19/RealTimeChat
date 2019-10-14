@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../src/build/jest/snapshot-serializer/index.js"],"names":["default","createSerializer"],"mappings":"AAAA,SAASA,OAAT,EAAkBC,gBAAlB,QAA0C,cAA1C","sourcesContent":["export { default, createSerializer } from './serializer';\n"],"file":"index.js"}

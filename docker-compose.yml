@@ -1,0 +1,39 @@
+version: "3"
+services:
+  frontend:
+    # replace username/repo:tag with your name and image details
+    build: .
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "3001:3001"
+    networks:
+      - webnet
+networks:
+  webnet:
+
+
+version: '3'
+services:
+  redis-server: 
+    image: 'redis'
+  cache-app:
+    build: /Cache
+    ports:
+      - "4001:3332"
+  frontend:
+    build: .
+    ports:
+      - "4001:3000"
+  keycloak:
+    image: jboss/keycloak
+    ENVIRONMENT:
+      -KEYCLOAK_USER=admin 
+      -KEYCLOAK_PASSWORD=admin
+      -DB_VENDOR=H2

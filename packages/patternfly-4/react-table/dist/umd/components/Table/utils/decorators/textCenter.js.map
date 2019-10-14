@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../esm/components/Table/utils/decorators/textCenter.js"],"names":["textCenter"],"mappings":";;;;;;;;;;;;;;;;;;;AAAO,QAAMA,UAAU,WAAVA,UAAU,GAAG,OAAO;AAC/BA,IAAAA,UAAU,EAAE;AADmB,GAAP,CAAnB","sourcesContent":["export const textCenter = () => ({\n  textCenter: true\n});\n//# sourceMappingURL=textCenter.js.map"],"file":"textCenter.js"}
