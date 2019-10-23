@@ -201,11 +201,11 @@ export default function DashboardContainer() {
         userLogout();
         clearCookies();
         deleteSession(email);
-        return new Promise((resolve,reject)=>{
-          fetch('http://localhost:8080/auth/realms/ChatApp/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Frealms%2FChatApp%2Faccount%2Fpassword')
-        .then(resp=>resolve(resp.url))
-        .catch(err=>reject(err))
-        }).then((url)=>document.location.href=url)
+        // return new Promise((resolve,reject)=>{
+        //   fetch('http://localhost:8080/auth/realms/ChatApp/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Frealms%2FChatApp%2Faccount%2Fpassword')
+        // .then(resp=>resolve(resp.url))
+        // .catch(err=>reject(err))
+        // }).then((url)=>document.location.href=url)
         //logout(clearCookies())
         // clearCookies();
         // deleteSession(username);
