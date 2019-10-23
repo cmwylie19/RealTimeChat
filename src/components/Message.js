@@ -12,12 +12,14 @@ const Message = ({ timestamp, type, body, primary }) => {
         received: {
             backgroundColor: 'grey',
             borderRadius: '15px',
-            padding: '15px'
+            padding: '15px',
+            boxShadow: '2px 2px 5px #000'
         },
         sent: {
             backgroundColor: primary,
             borderRadius: '15px',
-            padding: '15px'
+            padding: '15px',
+            boxShadow: '2px 2px 5px #000'
         },
         bubble: {
             display: 'flex',
