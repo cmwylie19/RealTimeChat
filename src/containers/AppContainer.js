@@ -4,12 +4,12 @@ import { Route } from 'react-router-dom'
 import DashboardContainer from './DashboardContainer'
 
 
-const AppContainer = () => (
+const AppContainer = (props) => (
     <RouterProvider>
         <ThemeProvider>
             <UserProvider>
                 <SocketProvider>
-                    <Route component={DashboardContainer} exact path="/" />
+                    <Route config={props} component={DashboardContainer} exact path="/" />
                 </SocketProvider>
             </UserProvider>
         </ThemeProvider>

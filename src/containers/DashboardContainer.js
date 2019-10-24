@@ -280,27 +280,34 @@ export default function DashboardContainer() {
             sidebar={Sidebar}
             isManagedSidebar
             skipToContent={PageSkipToContent}
-            breadcrumb={PageBreadcrumb}
+            // breadcrumb={PageBreadcrumb}
             mainContainerId={pageId}
           >
-            <PageSection variant={PageSectionVariants.light}>
-              <TextContent>
-                <Text component="h1"
-                  style={{ color: theme.secondary }}>{CurrentChat}</Text>
-                <Text component="p">
-                  Online Since 3:15pm<br />
-                  AppDev CoE
-              </Text>
-              </TextContent>
-            </PageSection>
             <PageSection
               style={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-end",
-
+                overflowY:'hidden',
+                height:'100%'
               }}>
+                <PageSection variant={PageSectionVariants.light} style={{boxShadow:"2px 2px 5px #676767"}}>
+              <TextContent >
+                <Text component="h1"
+                  style={{ color: theme.secondary }}>{CurrentChat}</Text>
+               
+              </TextContent>
+              <Text component="p">
+                  Online Since 3:15pm<br />
+                  AppDev CoE
+              </Text>
+            </PageSection>
               <Fragment>
+                <div style={{
+                  display:'flex', 
+                  flexDirection:'column',
+                   justifyContent:'flex-end',
+                   height:'70%',overflowY:'scroll'}}>
                 {
                   socket.msg
                  .filter((messg=>messg.to === email && messg.from === CurrentChat || messg.to===CurrentChat && messg.from===email))
@@ -313,7 +320,10 @@ export default function DashboardContainer() {
                     body={message.payload}
                   />
                 })}
+                </div>
+                
               </Fragment>
+          
               <Fragment>
                 <MessageInput
                   id={socket.id}
@@ -323,7 +333,7 @@ export default function DashboardContainer() {
                   style={{ display: 'flex' }}
                 />
               </Fragment>
-
+              
             </PageSection>
           </Page>
         )}

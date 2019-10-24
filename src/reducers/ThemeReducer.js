@@ -1,9 +1,14 @@
 import React, { useReducer, createContext, useContext } from 'react'
 import { orangeTheme, blueTheme, greenTheme } from '../assets/themes'
 
-const initialState = {
+const blueInitialState = {
     primary: blueTheme.primary,
     secondary: blueTheme.secondary
+}
+
+const greenInitialState = {
+    primary: greenTheme.primary,
+    secondary: greenTheme.secondary
 }
 
 const ThemeReducer = (state = {}, action) => {
@@ -48,7 +53,7 @@ const ThemeReducer = (state = {}, action) => {
 
 const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
-    const [state, dispatch] = useReducer(ThemeReducer, initialState)
+    const [state, dispatch] = useReducer(ThemeReducer, process.env.REACT_APP_THEME === 'blue' ? blueInitialState:greenInitialState)
     return (
         <ThemeContext.Provider
             value={{

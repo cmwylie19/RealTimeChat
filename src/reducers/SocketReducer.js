@@ -4,8 +4,10 @@ import { fetchAll, log } from '../libs';
 import { useUser } from './UserReducer'
 let SocketContext = createContext();
 
-var io = openSocket('http://localhost:3332');
-let socket;
+
+//var io = openSocket('http://localhost:3332');
+var io = openSocket(process.env.NODE_ENV === 'development' ? 'http://localhost:3332':'http://localhost:3332');
+//io=openSocket(`${process.env.BACKEND_URL}`)
 export const SocketProvider = (props) => {
     const {email,setEmail} = useUser()
     const [online, setOnline] = useState([]);
