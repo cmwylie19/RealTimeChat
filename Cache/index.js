@@ -130,13 +130,6 @@ io.on('connection', async (socket) => {
 
 })
 
-// io.on('groupMessage', (message) => sc.SocketController(socket,io).groupMessage(message))
-//io.on('broadcastMessage', (message) => io.emit.broadcast("BROADCAST_MESSAGE", message))
-//io.on('logout', ({ id }) => UserReducer(UserStore, { type: "DEL_USER", payload: { id: id } }))
-//io.on('connection', (socket) =>console.log("Connected",socket.id))//io.emit("ASSOCIATE_USER",socket.id))
-//io.on('privateMessage', (message) => console.log("PRIVATE MESG", message))
-//io.on("setUser", user => console.log(user.username + " conneced"))
-
 
 if (process.env.NODE_ENV !== 'test') {
     server.listen(process.env.PORT, () => {
