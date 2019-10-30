@@ -9,7 +9,7 @@ const AppContainer = (props) => (
         <ThemeProvider>
             <UserProvider>
                 <SocketProvider>
-                    <Route config={props} component={DashboardContainer} exact path="/" />
+                    <Route config={props} component={DashboardContainer} exact path="/hello" />
                 </SocketProvider>
             </UserProvider>
         </ThemeProvider>

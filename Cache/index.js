@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import http from 'http';
 import SocketIO from 'socket.io';
-import request from 'request'
+// import request from 'request'
 import cors from 'cors'
 import { getAsync, setAsync, fetchAll, delAsync } from './redis-client'
 import { createWriteStream } from 'fs';
@@ -53,16 +53,20 @@ app.get('/all', async (req, res) => {
         .send(await fetchAll())
 })
 
-app.post('/img/:id', async (req, res) => {
-    const outfile = createWriteStream(`./public/${req.params.id}.png`)
-    let download = await new Promise(function (resolve, reject) {
-        request('http://localhost:3000/img/logo512.png')
-            .pipe(outfile)
-            .on('finish', () => resolve(res))
-            .on('error', () => reject(res))
+// app.post('/img/:id', async (req, res) => {
+//     const outfile = createWriteStream(`./public/${req.params.id}.png`)
+//     let download = await new Promise(function (resolve, reject) {
+//         request('http://localhost:3000/img/logo512.png')
+//             .pipe(outfile)
+//             .on('finish', () => resolve(res))
+//             .on('error', () => reject(res))
 
-        res.send({ data: "success" })
-    })
+//         res.send({ data: "success" })
+//     })
+// })
+
+app.get('/health', async(req,res)=>{
+    res.send("UP")
 })
 
 let UserStore = {}
