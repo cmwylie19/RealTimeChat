@@ -32,7 +32,7 @@
     "multer": "^1.4.2",
     "nodemon": "^1.19.2",
     "redis": "^2.8.0",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "start": "^5.1.0",
     "supertest": "^4.0.2"
   },
